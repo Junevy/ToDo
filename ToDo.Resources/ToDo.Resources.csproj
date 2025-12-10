@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <LangVersion>13</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="AppIcon\AppBackground.jpg" />
+    <None Remove="AppIcon\app_background.jpg" />
+    <None Remove="AppIcon\icon.ico" />
+    <None Remove="ICON\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="AppIcon\AppBackground.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppIcon\app_background.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppIcon\icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ICON\icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

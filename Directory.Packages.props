@@ -1,0 +1,11 @@
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageVersion Include="Prism.DryIoc" Version="9.0.537" />
+		<PackageVersion Include="WPF-UI" Version="4.1.0" />
+	</ItemGroup>
+</Project>
+
+

@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net48</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>13</LangVersion>
+		<UseWPF>true</UseWPF>
+		<Nullable>enable</Nullable>
+		<ApplicationIcon>..\ToDo.Resources\AppIcon\icon.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+
+		<PackageReference Include="Prism.DryIoc" />
+		<PackageReference Include="WPF-UI" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ToDo.Resources\ToDo.Resources.csproj" />
+	</ItemGroup>
+
+
+</Project>
