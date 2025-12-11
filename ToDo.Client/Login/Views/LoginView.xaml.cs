@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ToDo.Client.Views
+namespace ToDo.Client.Login.Views
 {
     /// <summary>
     /// LoginView.xaml 的交互逻辑

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
-using ToDo.Client.Views;
+using ToDo.Client.Login.Views;
+using DialogWindow = ToDo.Client.Login.Views.DialogWindow;
 
 namespace ToDo.Client
 {
@@ -15,6 +16,8 @@ namespace ToDo.Client
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterDialogWindow<DialogWindow>();
+
             containerRegistry.RegisterDialog<LoginView>();
         }
 

@@ -1,5 +1,9 @@
 ﻿
-namespace ToDo.Client.ViewModels
+
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
+
+namespace ToDo.Client.Login.ViewModels
 {
     internal class LoginViewModel : IDialogAware
     {
@@ -7,11 +11,19 @@ namespace ToDo.Client.ViewModels
         public string Title => "Login";
         public DialogCloseListener RequestClose { get; set; }
         public DelegateCommand LoginCommand { get; private set; }
+        public DelegateCommand ChangeThemeCommand { get; private set; }
 
         public LoginViewModel(IContainerRegistry container)
         {
             this.container = container;
             LoginCommand = new DelegateCommand(Login);
+            ChangeThemeCommand = new DelegateCommand(ChangeTheme);
+
+        }
+
+        private void ChangeTheme()
+        {
+            ApplicationThemeManager.Apply(ApplicationTheme.Dark, WindowBackdropType.Mica);
         }
 
         private void Login()
