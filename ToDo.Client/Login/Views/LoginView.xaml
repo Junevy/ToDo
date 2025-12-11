@@ -9,6 +9,7 @@
     xmlns:vm="clr-namespace:ToDo.Client.Login.ViewModels"
     Width="600"
     Height="350"
+    xmlns:lang="clr-namespace:ToDo.Extensions.Resx;assembly=ToDo.Extensions"
     d:DataContext="{d:DesignInstance Type=vm:LoginViewModel}"
     Background="{DynamicResource ApplicationBackgroundBrush}"
     FontFamily="Arial"
@@ -60,7 +61,7 @@
                 FontSize="22"
                 FontWeight="Bold"
                 Foreground="{StaticResource TextFillColorPrimaryBrush}"
-                Text="How are you today?" />
+                Text="{lang:Resx HRU}" />
 
             <!--  account  -->
             <StackPanel Grid.Row="1" Margin="10,10,10,0">
@@ -71,7 +72,7 @@
                     FontSize="12"
                     FontWeight="Normal"
                     Foreground="SlateGray"
-                    Text="Account" />
+                    Text="{lang:Resx Account}" />
                 <ui:TextBox
                     Grid.Column="1"
                     Width="200"
@@ -92,7 +93,7 @@
                     FontSize="12"
                     FontWeight="Normal"
                     Foreground="SlateGray"
-                    Text="Password" />
+                    Text="{lang:Resx Password}" />
                 <ui:PasswordBox
                     Grid.Column="1"
                     MinWidth="200"
@@ -112,7 +113,7 @@
                 Margin="10,30,10,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                OffContent="Remember Me"
+                OffContent="{lang:Resx RememberMe}"
                 OnContent="Remember Me" />
 
             <!--  button, login and register  -->
@@ -127,7 +128,7 @@
                     Margin="0,0,10,0"
                     HorizontalAlignment="Left"
                     Command="{Binding LoginCommand}"
-                    Content="Login" />
+                    Content="{lang:Resx Login}" />
 
                 <ui:Button
                     Grid.Column="1"
@@ -136,7 +137,7 @@
                     HorizontalAlignment="Left"
                     Background="#5689fb"
                     Command="{Binding ChangeThemeCommand}"
-                    Content="Register"
+                    Content="{lang:Resx SignIn}"
                     Foreground="Black" />
 
             </StackPanel>

@@ -1,10 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
-    <UseWPF>true</UseWPF>
-	  <LangVersion>13</LangVersion>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<LangVersion>13</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Update="Lang.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Lang.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Lang.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Lang.Designer.cs</LastGenOutput>
+			<CustomToolNamespace>ToDo.Lang</CustomToolNamespace>
+		</EmbeddedResource>
+	</ItemGroup>
 
 </Project>
