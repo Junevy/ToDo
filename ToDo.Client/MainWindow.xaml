@@ -1,4 +1,4 @@
-﻿<Window
+﻿<ui:FluentWindow
     x:Class="ToDo.Client.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,19 +6,66 @@
     xmlns:lang="clr-namespace:ToDo.Extensions.Resx;assembly=ToDo.Extensions"
     xmlns:local="clr-namespace:ToDo.Client.Login.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="ToDo-Keep self"
-    Width="800"
-    Height="450"
+    Width="1200"
+    Height="650"
+    ExtendsContentIntoTitleBar="True"
+    WindowBackdropType="Mica"
+    WindowCornerPreference="RoundSmall"
+    WindowStartupLocation="CenterScreen"
+    FontFamily="Arial"
     mc:Ignorable="d">
-    <StackPanel>
-        <ui:ToggleSwitch
-            Command="{Binding ChangeLangCommand}"
-            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"
-            OffContent="中文-简体"
-            OnContent="en-US"/>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="45" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <TextBlock FontSize="20" Text="{lang:Resx HRU}" />
+        <!--  title  -->
+        <Grid Grid.Row="0">
+            <ui:TitleBar
+                Title="ToDo-Keep Self"
+                CloseWindowByDoubleClickOnIcon="True">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon Source="/ToDo.Resources;component/AppIcon/icon.ico" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+        </Grid>
 
-    </StackPanel>
-</Window>
+        <!--  app main  -->
+        <Grid Grid.Row="1">
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="80" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>-->
+
+            <!--  navigation  -->
+            <ui:NavigationView Margin="0"
+                x:Name="RootNavigation"
+                Grid.Column="0"     
+                Padding="20"
+                BreadcrumbBar="{Binding ElementName=BreadcrumbBar}"
+                FooterMenuItemsSource="{Binding FooterMenuItems, Mode=OneWay}"
+                FrameMargin="0"
+                IsBackButtonVisible="Visible"
+                IsPaneToggleVisible="True"
+                MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
+                               
+                PaneDisplayMode="LeftFluent" >
+                
+                <ui:NavigationView.Header>
+                    <ui:BreadcrumbBar x:Name="BreadcrumbBar" Margin="20,15,0,0" />
+                </ui:NavigationView.Header>
+
+            </ui:NavigationView>
+
+            <!--<ContentPresenter Grid.Column="1"  />-->
+
+        </Grid>
+
+
+    </Grid>
+</ui:FluentWindow>

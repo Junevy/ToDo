@@ -3,6 +3,7 @@ using System.Windows;
 using ToDo.Client.Login.ViewModels;
 using ToDo.Client.Login.Views;
 using ToDo.Client.Services;
+using ToDo.Client.Views;
 using DialogWindow = ToDo.Client.Login.Views.DialogWindow;
 
 namespace ToDo.Client
@@ -21,6 +22,7 @@ namespace ToDo.Client
         {
             containerRegistry.RegisterDialogWindow<DialogWindow>();
             containerRegistry.RegisterDialog<LoginView>();
+            containerRegistry.RegisterForNavigation<SettingsView>();
             containerRegistry.RegisterSingleton<ILocalizationService, LocalizationService>();
         }
 

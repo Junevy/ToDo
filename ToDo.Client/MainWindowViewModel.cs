@@ -1,20 +1,49 @@
-﻿namespace ToDo.Client
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Wpf.Ui.Controls;
+
+namespace ToDo.Client
 {
     public class MainWindowViewModel : BindableBase
     {
-        private readonly ILocalizationService localizationService;
+        private readonly IRegionManager regionManager;
+        public ObservableCollection<object> MenuItems { get; set; } = [];
+        public ObservableCollection<object> FooterMenuItems { get; set; } = [];
 
-        public DelegateCommand<bool?> ChangeLangCommand { get; private set; }
-
-        public MainWindowViewModel(ILocalizationService localizationService)
+        public MainWindowViewModel(IRegionManager regionManager)
         {
-            this.localizationService = localizationService;
-            ChangeLangCommand = new(ChangeLang);
+            this.regionManager = regionManager;
+
+            MenuItems.Add(AddItem(
+                "Home",
+                new SymbolIcon { Symbol = SymbolRegular.Home24 },
+                typeof(Views.SettingsView),
+                ToSettingsCommand));
+
+            FooterMenuItems.Add(AddItem(
+                "SET",
+                new SymbolIcon { Symbol = SymbolRegular.Settings24 },
+                typeof(Views.SettingsView),
+                ToSettingsCommand));
         }
 
-        private void ChangeLang(bool? culture)
+        public DelegateCommand ToSettingsCommand => new(() =>
         {
-            localizationService.SetCulture(culture ?? false ? "en-Us" : "zh-CN");
+            //regionManager.RequestNavigate("ContentRegion", "SettingsView");
+        });
+
+        public NavigationViewItem AddItem
+            (string content, SymbolIcon icon, Type targetType, ICommand command)
+        {
+            return new NavigationViewItem()
+            {
+                Content = content,
+                Icon = icon,
+                TargetPageType = targetType,
+                Command = command
+            };
         }
+
+
     }
 }
