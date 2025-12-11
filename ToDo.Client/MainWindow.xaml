@@ -12,25 +12,13 @@
     Height="450"
     mc:Ignorable="d">
     <StackPanel>
-        <!--<TextBlock FontSize="22" Text="Logined View" />-->
         <ui:ToggleSwitch
-            x:Name="LangSwitch"
             Command="{Binding ChangeLangCommand}"
-            CommandParameter="{Binding ElementName=LangSwitch, Path=IsChecked}"
+            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}"
             OffContent="中文-简体"
             OnContent="en-US"/>
-        
-        <Button
-            Command="{Binding ChangeLangCommand}"
-            CommandParameter="{Binding ElementName=LangSwitch, Path=IsChecked}"
-            Content="test111" />
 
         <TextBlock FontSize="20" Text="{lang:Resx HRU}" />
-        <!--<Path
-            Width="1"
-            Height="1"
-            Data="{StaticResource app_icon}"
-            Fill="Purple" />-->
 
     </StackPanel>
 </Window>
