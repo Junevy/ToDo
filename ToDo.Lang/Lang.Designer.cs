@@ -61,6 +61,24 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 About 的本地化字符串。
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 From and Created by Junevy. Version 1.0.1 的本地化字符串。
+        /// </summary>
+        public static string AboutApp {
+            get {
+                return ResourceManager.GetString("AboutApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Account 的本地化字符串。
         /// </summary>
         public static string Account {
@@ -70,11 +88,74 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Check Update 的本地化字符串。
+        /// </summary>
+        public static string CheckUpdate {
+            get {
+                return ResourceManager.GetString("CheckUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Chinese 的本地化字符串。
+        /// </summary>
+        public static string Chinese {
+            get {
+                return ResourceManager.GetString("Chinese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似  的本地化字符串。
+        /// </summary>
+        public static string ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Dark 的本地化字符串。
+        /// </summary>
+        public static string Dark {
+            get {
+                return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 English 的本地化字符串。
+        /// </summary>
+        public static string English {
+            get {
+                return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 How are you today? 的本地化字符串。
         /// </summary>
         public static string HRU {
             get {
                 return ResourceManager.GetString("HRU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Language 的本地化字符串。
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Light 的本地化字符串。
+        /// </summary>
+        public static string Light {
+            get {
+                return ResourceManager.GetString("Light", resourceCulture);
             }
         }
         
@@ -106,11 +187,29 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Settings 的本地化字符串。
+        /// </summary>
+        public static string SettingsTitle {
+            get {
+                return ResourceManager.GetString("SettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Sign In 的本地化字符串。
         /// </summary>
         public static string SignIn {
             get {
                 return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Theme 的本地化字符串。
+        /// </summary>
+        public static string Theme {
+            get {
+                return ResourceManager.GetString("Theme", resourceCulture);
             }
         }
         

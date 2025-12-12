@@ -1,11 +1,21 @@
 ﻿using Prism.Mvvm;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace ToDo.Client.ViewModels
 {
     public class SettingsViewModel : BindableBase, INavigationAware
     {
         private readonly ILocalizationService localizationService;
-        public DelegateCommand<bool?> ChangeLangCommand { get; private set; }
+        public DelegateCommand<string> ChangeLangCommand { get; private set; }
+        public DelegateCommand<string> ChangeThemeCommand => new((theme) =>
+        {
+            ApplicationThemeManager.Apply(
+                theme == "Light" ? ApplicationTheme.Light :
+                ApplicationTheme.Dark, WindowBackdropType.Mica);
+        });
+
+        //public string test { get; set; } = "Settings ViewModel";
 
         public SettingsViewModel(ILocalizationService localizationService)
         {
@@ -13,10 +23,8 @@ namespace ToDo.Client.ViewModels
             ChangeLangCommand = new(ChangeLang);
         }
 
-        private void ChangeLang(bool? culture)
-        {
-            localizationService.SetCulture(culture ?? false ? "en-Us" : "zh-CN");
-        }
+        private void ChangeLang(string culture)
+            => localizationService.SetCulture(culture == "English" ? "en-Us" : "zh-CN");
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
@@ -29,7 +37,7 @@ namespace ToDo.Client.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+
         }
     }
 }

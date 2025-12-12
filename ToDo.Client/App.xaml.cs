@@ -23,6 +23,7 @@ namespace ToDo.Client
             containerRegistry.RegisterDialogWindow<DialogWindow>();
             containerRegistry.RegisterDialog<LoginView>();
             containerRegistry.RegisterForNavigation<SettingsView>();
+            containerRegistry.RegisterForNavigation<HomeView>();
             containerRegistry.RegisterSingleton<ILocalizationService, LocalizationService>();
         }
 

@@ -9,8 +9,27 @@
     Title="{Binding Title}"
     Width="600"
     Height="380"
+    FontFamily="Arial"
     ResizeMode="CanMinimize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d" >
+
+    <!--<Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition MaxHeight="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        
+        --><!--  title  --><!--
+        <Grid Grid.Row="0">
+            <ui:TitleBar Title="ToDo-Keep Self" CloseWindowByDoubleClickOnIcon="True">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon Source="/ToDo.Resources;component/AppIcon/icon.ico" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+        </Grid>
+    </Grid>-->
 
 </Window>
