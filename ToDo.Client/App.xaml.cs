@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Windows;
-using ToDo.Client.Login.ViewModels;
 using ToDo.Client.Login.Views;
 using ToDo.Client.Services;
 using ToDo.Client.Views;
+using ToDo.WebAPI.HttpClient;
 using DialogWindow = ToDo.Client.Login.Views.DialogWindow;
 
 namespace ToDo.Client
@@ -20,11 +20,23 @@ namespace ToDo.Client
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            // ===================================
+            // Views 
+            // ===================================
             containerRegistry.RegisterDialogWindow<DialogWindow>();
             containerRegistry.RegisterDialog<LoginView>();
             containerRegistry.RegisterForNavigation<SettingsView>();
             containerRegistry.RegisterForNavigation<HomeView>();
+
+            // ===================================
+            // Localization service 
+            // ===================================
             containerRegistry.RegisterSingleton<ILocalizationService, LocalizationService>();
+
+            // ===================================
+            // Tools
+            // ===================================
+            containerRegistry.GetContainer().Register<HttpRequestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
         }
 
         protected override void OnInitialized()

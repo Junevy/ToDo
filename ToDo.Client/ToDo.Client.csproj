@@ -11,7 +11,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="RestSharp" />
 		<PackageReference Include="Prism.DryIoc" />
 		<PackageReference Include="WPF-UI" />
 	</ItemGroup>
@@ -20,6 +21,11 @@
 	  <ProjectReference Include="..\ToDo.Extensions\ToDo.Extensions.csproj" />
 	  <ProjectReference Include="..\ToDo.Lang\ToDo.Lang.csproj" />
 	  <ProjectReference Include="..\ToDo.Resources\ToDo.Resources.csproj" />
+	  <ProjectReference Include="..\ToDo.WebAPI\ToDo.WebAPI.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
 	</ItemGroup>
 
 

@@ -58,7 +58,7 @@
                             FontSize="12"
                             FontWeight="Normal"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{lang:Resx Account}" />
+                            Text="{lang:Resx Account}"  />
                         <ui:TextBox
                             Grid.Column="1"
                             Width="200"
@@ -66,7 +66,7 @@
                             ui:AllowDrop="False"
                             BorderThickness="1.5"
                             FontSize="14"
-                            Text="" />
+                            Text="{Binding AccountDTO.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <!--  password  -->
                         <TextBlock
@@ -84,7 +84,7 @@
                             BorderThickness="1.5"
                             FontSize="14"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="" />
+                            Text="{Binding AccountDTO.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <!--  RememberMe  -->
                         <ui:ToggleSwitch
@@ -134,7 +134,7 @@
                             ui:AllowDrop="False"
                             BorderThickness="1.5"
                             FontSize="14"
-                            Text="" />
+                            Text="{Binding AccountDTO.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <!--  password  -->
                         <TextBlock
@@ -152,7 +152,7 @@
                             BorderThickness="1.5"
                             FontSize="14"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="" />
+                            Text="{Binding AccountDTO.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <!--  Confirm Password  -->
                         <TextBlock
@@ -170,7 +170,7 @@
                             BorderThickness="1.5"
                             FontSize="14"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="" />
+                            Text="{Binding AccountDTO.ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <ui:Button
                             Width="100"
@@ -178,7 +178,7 @@
                             Margin="0,20,0,0"
                             HorizontalAlignment="Stretch"
                             Background=" #1E90FF"
-                            Command="{Binding ChangeThemeCommand}"
+                            Command="{Binding SignInCommand}"
                             Content="{lang:Resx SignIn}"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                     </StackPanel>
