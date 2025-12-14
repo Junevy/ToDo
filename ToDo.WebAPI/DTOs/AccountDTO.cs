@@ -29,7 +29,6 @@ namespace ToDo.WebAPI.DTOs
         }
 
         private string confirmPassword = string.Empty;
-        [Required(ErrorMessage = "ConfirmPassword can not be empty!")]
         public string ConfirmPassword
         {
             get => confirmPassword;
@@ -38,13 +37,15 @@ namespace ToDo.WebAPI.DTOs
                 SetProperty(ref confirmPassword, value);
                 if (value != Password)
                 {
+                    if (value == string.Empty)
+                        ClearErrors(nameof(ConfirmPassword));
+
                     if (!HasErrored(nameof(ConfirmPassword)))
                         AddError(nameof(ConfirmPassword), "Password can not matched!");
                 }
                 else
                 {
                     ClearErrors(nameof(ConfirmPassword));
-                    ClearErrors(nameof(Password));
                 }
             }
         }
