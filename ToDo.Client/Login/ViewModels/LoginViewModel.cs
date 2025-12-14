@@ -87,8 +87,40 @@ namespace ToDo.Client.Login.ViewModels
 
         private async Task Login()
         {
-            //var prms = new DialogParameters();
-            //prms.Add()
+            // 基本验证
+            if (string.IsNullOrEmpty(AccountDTO.Account) || string.IsNullOrEmpty(AccountDTO.Password))
+            {
+                var message = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = "Error",
+                    Content = "Account or Password can not be empty or Password not matched!"
+                };
+                _ = message.ShowDialogAsync();
+                return;
+            }
+
+            // 创建请求，设定 路由、请求方式、DTO
+            var request = new AccountRequest<AccountDTO>
+            {
+                Route = $"/Users/Login?account={accountDTO.Account}&password={accountDTO.Password}",
+                Method = RestSharp.Method.GET,
+            };
+
+            // 发起请求
+            var response = await httpClient.ExecuteAsync(request);
+            // 登录失败
+            if (response.Code != 1)
+            {
+                var signInError = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = "Error",
+                    Content = response.Message ?? "Login in error!"
+                };
+                _ = signInError.ShowDialogAsync();
+                return;
+            }
+
+            // 登录成功
             RequestClose.Invoke(new DialogResult(ButtonResult.OK));
         }
 
