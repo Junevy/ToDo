@@ -25,20 +25,40 @@ namespace ToDo.WebAPI.DTOs
             set
             {
                 SetProperty(ref password, value);
+                if (value != ConfirmPassword)
+                {
+                    if (!HasErrored(nameof(Password)))
+                        AddError(nameof(Password), "Password can not matched!");
+                }
+                else
+                {
+                    ClearErrors(nameof(Password));
+                    ClearErrors(nameof(Password));
+                }
             }
         }
 
         private string confirmPassword = string.Empty;
-        [Required(ErrorMessage = "Confirm password can not be empty!")]
+        [Required(ErrorMessage = "ConfirmPassword can not be empty!")]
         public string ConfirmPassword
         {
             get => confirmPassword;
             set
             {
                 SetProperty(ref confirmPassword, value);
-                if (value != password)
+                //if (value != Password)
+                //{
+                //    AddError(nameof(ConfirmPassword), "Password can not matched!");
+                //}
+                if (value != Password)
                 {
-                    AddError(nameof(ConfirmPassword), "Confirm password can not matched password!");
+                    if (!HasErrored(nameof(ConfirmPassword)))
+                        AddError(nameof(ConfirmPassword), "Password can not matched!");
+                }
+                else
+                {
+                    ClearErrors(nameof(ConfirmPassword));
+                    ClearErrors(nameof(Password));
                 }
             }
         }

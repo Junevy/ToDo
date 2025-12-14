@@ -6,7 +6,7 @@ namespace ToDo.WebAPI.Services
 {
     public abstract class ValidatableBindableBase : BindableBase, INotifyDataErrorInfo
     {
-        private readonly Dictionary<string, List<string>> errors = new();
+        private readonly Dictionary<string, List<string>> errors = [];
         public IEnumerable<string> AllErrors => errors.SelectMany(e => e.Value);
 
         public bool HasErrors => errors.Any();

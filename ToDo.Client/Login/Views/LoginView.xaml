@@ -40,7 +40,7 @@
                 Stroke="#fffff9" />
         </Grid>
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" VerticalAlignment="Stretch">
             <TabControl Margin="0,20,0,0">
                 <TabItem IsSelected="True">
                     <TabItem.Header>
@@ -107,6 +107,24 @@
                             Command="{Binding LoginCommand}"
                             Content="{lang:Resx Login}"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+
+                        <ui:ListView
+                            Grid.Row="2"
+                            MaxHeight="25"
+                            Margin="0,13,0,0"
+                            VerticalAlignment="Bottom"
+                            ItemsSource="{Binding AccountDTO.AllErrors}">
+                            <ui:ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontFamily="Arial"
+                                        FontSize="12"
+                                        Foreground="IndianRed"
+                                        Text="{Binding}" />
+                                </DataTemplate>
+                            </ui:ListView.ItemTemplate>
+                        </ui:ListView>
                     </StackPanel>
                 </TabItem>
 
@@ -185,21 +203,22 @@
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
 
                         <!--<TextBlock Text="{Binding AccountDTO.AllErrors, StringFormat={}{0}}"/>-->
-                        <ItemsControl Margin="0,13,0,0" ItemsSource="{Binding AccountDTO.AllErrors}">
-                            <ItemsControl.ItemTemplate>
+                        <ui:ListView Margin="0,13,0,0" ItemsSource="{Binding AccountDTO.AllErrors}">
+                            <ui:ListView.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock
                                         HorizontalAlignment="Center"
-                                        FontFamily="Consolas"
+                                        FontFamily="Arial"
                                         FontSize="12"
-                                        Foreground="Red"
+                                        Foreground="IndianRed"
                                         Text="{Binding}" />
                                 </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                            </ui:ListView.ItemTemplate>
+                        </ui:ListView>
                     </StackPanel>
                 </TabItem>
             </TabControl>
+
         </Grid>
     </Grid>
 </UserControl>

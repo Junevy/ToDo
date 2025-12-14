@@ -27,8 +27,6 @@ namespace ToDo.WebAPI.HttpClient
             if (request.Params is not null)
             {
                 re.AddJsonBody(request.Params);
-                //var jsonParams = JsonConvert.SerializeObject(request.Params);
-                //re.AddParameter("param", jsonParams);
             }
 
             // Sets the url of request
@@ -43,7 +41,7 @@ namespace ToDo.WebAPI.HttpClient
                     ?? new AccountResponse<AccountDTO>() { Code = -1, Message = "Server error", Data = null };
 
             // return default result
-            return new AccountResponse<AccountDTO>() { Code = -2, Message = "Server error", Data = null };
+            return new AccountResponse<AccountDTO>() { Code = -1, Message = "Server error", Data = null };
         }
     }
 }
