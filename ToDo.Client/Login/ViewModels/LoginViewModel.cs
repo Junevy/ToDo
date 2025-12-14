@@ -13,8 +13,7 @@ namespace ToDo.Client.Login.ViewModels
         public DialogCloseListener RequestClose { get; set; }
 
         #region Commands
-        public DelegateCommand LoginCommand { get; private set; }
-        //public DelegateCommand SignInCommand { get; private set; }
+        public AsyncDelegateCommand LoginCommand { get; private set; }
         public AsyncDelegateCommand SignInCommand { get; private set; }
         #endregion
 
@@ -30,11 +29,12 @@ namespace ToDo.Client.Login.ViewModels
             }
         }
         #endregion
+
         public LoginViewModel(IContainerRegistry container, HttpRequestClient client)
         {
             this.container = container;
             this.httpClient = client;
-            LoginCommand = new DelegateCommand(Login);
+            LoginCommand = new AsyncDelegateCommand(Login);
             SignInCommand = new(SingIn);
         }
 
@@ -85,7 +85,7 @@ namespace ToDo.Client.Login.ViewModels
             _ = signInScs.ShowDialogAsync();
         }
 
-        private void Login()
+        private async Task Login()
         {
             //var prms = new DialogParameters();
             //prms.Add()
@@ -101,5 +101,8 @@ namespace ToDo.Client.Login.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
         }
+
+
+
     }
 }

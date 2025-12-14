@@ -9,7 +9,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:ToDo.Client.Login.ViewModels"
     Width="600"
-    Height="350"
+    Height="400"
     d:DataContext="{d:DesignInstance Type=vm:LoginViewModel}"
     Background="{DynamicResource ApplicationBackgroundBrush}"
     FontFamily="Arial"
@@ -41,7 +41,7 @@
         </Grid>
 
         <Grid Grid.Column="1">
-            <TabControl Margin="0,20,0,0" >
+            <TabControl Margin="0,20,0,0">
                 <TabItem IsSelected="True">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -58,15 +58,16 @@
                             FontSize="12"
                             FontWeight="Normal"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                            Text="{lang:Resx Account}"  />
+                            Text="{lang:Resx Account}" />
                         <ui:TextBox
+                            x:Name="Account"
                             Grid.Column="1"
                             Width="200"
                             HorizontalAlignment="Stretch"
                             ui:AllowDrop="False"
                             BorderThickness="1.5"
                             FontSize="14"
-                            Text="{Binding AccountDTO.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding AccountDTO.Account, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
 
                         <!--  password  -->
                         <TextBlock
@@ -97,7 +98,7 @@
                             Content="{lang:Resx RememberMe}"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
 
-                        <!--Login-->
+                        <!--  Login  -->
                         <ui:Button
                             Width="100"
                             Height="35"
@@ -109,7 +110,7 @@
                     </StackPanel>
                 </TabItem>
 
-                <!--Sign in-->
+                <!--  Sign in  -->
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -164,6 +165,7 @@
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                             Text="{lang:Resx ConfirmPassword}" />
                         <ui:PasswordBox
+                            x:Name="ConfirmPassword"
                             Grid.Column="1"
                             HorizontalAlignment="Stretch"
                             ui:AllowDrop="False"
@@ -181,6 +183,20 @@
                             Command="{Binding SignInCommand}"
                             Content="{lang:Resx SignIn}"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+
+                        <!--<TextBlock Text="{Binding AccountDTO.AllErrors, StringFormat={}{0}}"/>-->
+                        <ItemsControl Margin="0,13,0,0" ItemsSource="{Binding AccountDTO.AllErrors}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontFamily="Consolas"
+                                        FontSize="12"
+                                        Foreground="Red"
+                                        Text="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </TabItem>
             </TabControl>

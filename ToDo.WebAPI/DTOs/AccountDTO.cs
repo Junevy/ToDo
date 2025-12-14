@@ -1,9 +1,46 @@
-﻿namespace ToDo.WebAPI.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+using ToDo.WebAPI.Services;
+
+namespace ToDo.WebAPI.DTOs
 {
-    public class AccountDTO
+    public class AccountDTO : ValidatableBindableBase
     {
-        public string Account { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
+        private string account;
+        [Required(ErrorMessage = "Account can not be empty!")]
+        //[RegularExpression("")]
+        public string Account
+        {
+            get => account;
+            set
+            {
+                SetProperty(ref account, value);
+            }
+        }
+
+        private string password;
+        [Required(ErrorMessage = "Password can not be empty!")]
+        public string Password
+        {
+            get => password;
+            set
+            {
+                SetProperty(ref password, value);
+            }
+        }
+
+        private string confirmPassword = string.Empty;
+        [Required(ErrorMessage = "Confirm password can not be empty!")]
+        public string ConfirmPassword
+        {
+            get => confirmPassword;
+            set
+            {
+                SetProperty(ref confirmPassword, value);
+                if (value != password)
+                {
+                    AddError(nameof(ConfirmPassword), "Confirm password can not matched password!");
+                }
+            }
+        }
     }
 }

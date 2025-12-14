@@ -9,6 +9,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="Prism.Core" />
 		<PackageReference Include="RestSharp" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="System.ComponentModel.DataAnnotations" />
 	</ItemGroup>
 </Project>
