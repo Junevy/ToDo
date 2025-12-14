@@ -25,16 +25,6 @@ namespace ToDo.WebAPI.DTOs
             set
             {
                 SetProperty(ref password, value);
-                if (value != ConfirmPassword)
-                {
-                    if (!HasErrored(nameof(Password)))
-                        AddError(nameof(Password), "Password can not matched!");
-                }
-                else
-                {
-                    ClearErrors(nameof(Password));
-                    ClearErrors(nameof(Password));
-                }
             }
         }
 
@@ -46,10 +36,6 @@ namespace ToDo.WebAPI.DTOs
             set
             {
                 SetProperty(ref confirmPassword, value);
-                //if (value != Password)
-                //{
-                //    AddError(nameof(ConfirmPassword), "Password can not matched!");
-                //}
                 if (value != Password)
                 {
                     if (!HasErrored(nameof(ConfirmPassword)))

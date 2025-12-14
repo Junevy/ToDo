@@ -8,8 +8,9 @@ namespace ToDo.WebAPI.Services
     {
         private readonly Dictionary<string, List<string>> errors = [];
         public IEnumerable<string> AllErrors => errors.SelectMany(e => e.Value);
-
         public bool HasErrors => errors.Any();
+        public string FirstError => AllErrors.FirstOrDefault();
+
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public IEnumerable GetErrors(string propertyName)
@@ -56,6 +57,8 @@ namespace ToDo.WebAPI.Services
             errors[propertyName].Add(error);
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             RaisePropertyChanged(nameof(AllErrors));
+            RaisePropertyChanged(nameof(HasErrors));
+            RaisePropertyChanged(nameof(FirstError));
         }
 
         protected void ClearErrors(string propertyName)
@@ -64,6 +67,9 @@ namespace ToDo.WebAPI.Services
             {
                 ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
                 RaisePropertyChanged(nameof(AllErrors));
+                RaisePropertyChanged(nameof(HasErrors));
+                RaisePropertyChanged(nameof(FirstError));
+
             }
         }
 
