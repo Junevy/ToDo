@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
 using System.Windows;
+using ToDo.Client.Home.Views;
 using ToDo.Client.Login.Views;
 using ToDo.Client.Services;
-using ToDo.Client.Views;
+using ToDo.Client.Settings.ViewModels;
+using ToDo.Client.Settings.Views;
 using ToDo.WebAPI.HttpClient;
 using DialogWindow = ToDo.Client.Login.Views.DialogWindow;
 
@@ -25,8 +27,9 @@ namespace ToDo.Client
             // ===================================
             containerRegistry.RegisterDialogWindow<DialogWindow>();
             containerRegistry.RegisterDialog<LoginView>();
-            containerRegistry.RegisterForNavigation<SettingsView>();
             containerRegistry.RegisterForNavigation<HomeView>();
+            containerRegistry.RegisterForNavigation<SettingsView>();
+            containerRegistry.RegisterSingleton<SettingsViewModel>();
 
             // ===================================
             // Localization service 

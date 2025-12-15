@@ -1,16 +1,22 @@
 ﻿<UserControl
-    x:Class="ToDo.Client.Views.SettingsView"
+    x:Class="ToDo.Client.Settings.Views.SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvt="clr-namespace:ToDo.Converter.Services;assembly=ToDo.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ext="clr-namespace:ToDo.Extensions.Resx;assembly=ToDo.Extensions"
-    xmlns:local="clr-namespace:ToDo.Client.Views"
+    xmlns:local="clr-namespace:ToDo.Client.Settings.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <cvt:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </UserControl.Resources>
+
     <Border
         Margin="2,10,0,0"
         HorizontalAlignment="Stretch"
@@ -22,14 +28,14 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Orientation="Vertical">
-            
+
             <ui:TextBlock
-                Margin="0,10,0,20"
+                Margin="0,10,0,10"
                 Appearance="Primary"
                 FontTypography="Title"
                 Text="{ext:Resx SettingsTitle}" />
 
-            <!--theme switcher-->
+            <!--  theme switcher  -->
             <ui:TextBlock
                 Margin="0,0,0,5"
                 Appearance="Primary"
@@ -41,16 +47,16 @@
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Name}"
                 Content="{ext:Resx Light}"
                 GroupName="Theme"
-                IsChecked="True" />
+                IsChecked="{Binding Theme, Converter={StaticResource InverseBoolConverter}}" />
             <RadioButton
                 x:Name="Dark"
                 Command="{Binding ChangeThemeCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Name}"
                 Content="{ext:Resx Dark}"
                 GroupName="Theme"
-                IsChecked="False" />
+                IsChecked="{Binding Theme}" />
 
-            <!--language switch-->
+            <!--  language switch  -->
             <ui:TextBlock
                 Margin="0,20,0,5"
                 Appearance="Primary"
@@ -62,23 +68,27 @@
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Name}"
                 Content="{ext:Resx Chinese}"
                 GroupName="Lang"
-                IsChecked="True" />
+                IsChecked="{Binding Lang}" />
             <RadioButton
                 x:Name="English"
                 Command="{Binding ChangeLangCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Name}"
                 Content="{ext:Resx English}"
                 GroupName="Lang"
-                IsChecked="False" />
+                IsChecked="{Binding Lang, Converter={StaticResource InverseBoolConverter}}" />
 
-            <!--about-->
+            <!--  about  -->
             <ui:TextBlock
                 Margin="0,20,0,5"
                 Appearance="Primary"
                 FontTypography="Subtitle"
                 Text="{ext:Resx About}" />
-            <Label Content="{ext:Resx AboutApp}" FontFamily="Consolas" FontSize="12" Margin="0,0,0,10"/>
-            <ui:Button Content="{ext:Resx CheckUpdate}"  Icon="{ui:SymbolIcon PhoneUpdateCheckMark20}" />
+            <Label
+                Margin="0,0,0,10"
+                Content="{ext:Resx AboutApp}"
+                FontFamily="Consolas"
+                FontSize="12" />
+            <ui:Button Content="{ext:Resx CheckUpdate}" Icon="{ui:SymbolIcon PhoneUpdateCheckMark20}" />
         </StackPanel>
 
     </Border>

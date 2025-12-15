@@ -37,30 +37,31 @@
         <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MaxWidth="65"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition MaxWidth="65" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!--  navigation  -->
-            <ui:NavigationView 
-                x:Name="RootNavigation"
+            <ui:NavigationView
                 Grid.Column="0"
                 Margin="0,10,0,0"
                 Padding="20"
-                BreadcrumbBar="{Binding ElementName=BreadcrumbBar}"
                 FooterMenuItemsSource="{Binding FooterMenuItems, Mode=OneWay}"
-                FrameMargin="0"
-                IsBackButtonVisible="Auto"
-                IsPaneToggleVisible="True"
+                IsBackButtonVisible="Collapsed"
+                IsPaneToggleVisible="False"
                 MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
                 PaneDisplayMode="LeftFluent">
 
-                <ui:NavigationView.Header>
+                <!--<ui:NavigationView.Header>
                     <ui:BreadcrumbBar x:Name="BreadcrumbBar" Margin="0" />
                 </ui:NavigationView.Header>
 
+                <ui:NavigationView.PaneFooter>
+                    <Grid />
+                    --><!--  覆盖默认 Footer  --><!--
+                </ui:NavigationView.PaneFooter>-->
             </ui:NavigationView>
 
-            <ContentControl Grid.Column="1" prism:RegionManager.RegionName="ContentRegion"  />
+            <ContentControl Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
 
         </Grid>
 

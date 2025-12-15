@@ -171,4 +171,13 @@
   <data name="ConfirmPassword" xml:space="preserve">
     <value>确认密码</value>
   </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>待办事项</value>
+  </data>
+  <data name="Memo" xml:space="preserve">
+    <value>备忘录</value>
+  </data>
 </root>

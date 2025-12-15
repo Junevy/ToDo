@@ -1,6 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using ToDo.Client.Views;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using ToDo.Client.Settings.Views;
+using ToDo.Client.Home.Views;
 using Wpf.Ui.Controls;
 
 namespace ToDo.Client
@@ -10,10 +13,16 @@ namespace ToDo.Client
         private readonly IRegionManager regionmanager;
         public ObservableCollection<object> MenuItems { get; set; } = [];
         public ObservableCollection<object> FooterMenuItems { get; set; } = [];
+        public DelegateCommand ToSettingsCommand { get; set; }
+
+        public DelegateCommand ToHomeCommand { get; set; }
 
         public MainWindowViewModel(IRegionManager regionManager)
         {
             this.regionmanager = regionManager;
+
+            ToSettingsCommand = new(ToSettings);
+            ToHomeCommand = new(ToHome);
 
             MenuItems.Add(AddItem(
                 "Home",
@@ -26,18 +35,42 @@ namespace ToDo.Client
                 new SymbolIcon { Symbol = SymbolRegular.Settings24 },
                 typeof(SettingsView),
                 ToSettingsCommand));
+
+            FooterMenuItems.Add(AddItem(
+                "Admin",
+                new ImageIcon
+                {
+                    Source = new BitmapImage(
+                    new Uri("pack://application:,,,/ToDo.Resources;component/AppIcon/users.jpg")),
+                    Width = 40,
+                    Height = 40,
+                    Clip = new EllipseGeometry()
+                    {
+                        Center = new System.Windows.Point(20, 20),
+                        RadiusX = 20,
+                        RadiusY = 20,
+                    }
+                },
+                typeof(SettingsView),
+                ToHomeCommand));
         }
 
-        public DelegateCommand ToSettingsCommand => new(() =>
-        {
-            regionmanager.RequestNavigate("ContentRegion", "SettingsView");
-        });
-        public DelegateCommand ToHomeCommand => new(() =>
-        {
-            regionmanager.RequestNavigate("ContentRegion", "HomeView");
-        });
+        private void ToSettings()
+            => regionmanager.RequestNavigate("ContentRegion", "SettingsView");
+        private void ToHome()
+            => regionmanager.RequestNavigate("ContentRegion", "HomeView");
 
-        public NavigationViewItem AddItem(string content, SymbolIcon icon, Type targetType, ICommand command)
+
+        /// <summary>
+        /// Add Navigation item with symbol icon
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="icon"></param>
+        /// <param name="targetType"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public NavigationViewItem AddItem
+            (string content, SymbolIcon icon, Type targetType, ICommand command)
         {
             return new NavigationViewItem()
             {
@@ -48,6 +81,24 @@ namespace ToDo.Client
             };
         }
 
-
+        /// <summary>
+        /// Add Navigation item with image icon
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="icon"></param>
+        /// <param name="targetType"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public NavigationViewItem AddItem
+            (string content, ImageIcon icon, Type targetType, ICommand command)
+        {
+            return new NavigationViewItem()
+            {
+                Content = content,
+                TargetPageType = targetType,
+                Icon = icon,
+                Command = command,
+            };
+        }
     }
 }

@@ -188,4 +188,16 @@
     <value>Confirm Password</value>
     <comment>Confirm password word</comment>
   </data>
+  <data name="HomeTitle" xml:space="preserve">
+    <value>Home</value>
+    <comment>HomeTitle</comment>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>Priority</value>
+    <comment>Priority</comment>
+  </data>
+  <data name="Memo" xml:space="preserve">
+    <value>Memo</value>
+    <comment>Memo</comment>
+  </data>
 </root>

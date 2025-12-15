@@ -1,12 +1,27 @@
-﻿using Prism.Mvvm;
-using Wpf.Ui.Appearance;
+﻿using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
-namespace ToDo.Client.ViewModels
+namespace ToDo.Client.Settings.ViewModels
 {
     public class SettingsViewModel : BindableBase, INavigationAware
     {
         private readonly ILocalizationService localizationService;
+
+        private bool theme = false;
+        public bool Theme
+        {
+            get { return theme; }
+            set { SetProperty(ref theme, value); }
+        }
+
+        private bool lang = true;
+        public bool Lang
+        {
+            get { return lang; }
+            set { SetProperty(ref lang, value); }
+        }
+
+
         public DelegateCommand<string> ChangeLangCommand { get; private set; }
         public DelegateCommand<string> ChangeThemeCommand => new((theme) =>
         {

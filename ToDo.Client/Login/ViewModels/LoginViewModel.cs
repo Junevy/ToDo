@@ -87,6 +87,9 @@ namespace ToDo.Client.Login.ViewModels
 
         private async Task Login()
         {
+            RequestClose.Invoke(new DialogResult(ButtonResult.OK));
+            return;
+
             // 基本验证
             if (string.IsNullOrEmpty(AccountDTO.Account) || string.IsNullOrEmpty(AccountDTO.Password))
             {

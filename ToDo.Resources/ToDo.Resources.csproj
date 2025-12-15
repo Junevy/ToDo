@@ -8,12 +8,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AppIcon\completed.png" />
     <None Remove="AppIcon\icon.ico" />
+    <None Remove="AppIcon\note.png" />
+    <None Remove="AppIcon\percent.png" />
+    <None Remove="AppIcon\summary.png" />
+    <None Remove="AppIcon\users.jpg" />
     <None Remove="ICON\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="AppIcon\completed.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="AppIcon\icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppIcon\note.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppIcon\percent.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppIcon\summary.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppIcon\users.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
