@@ -180,4 +180,13 @@
   <data name="Memo" xml:space="preserve">
     <value>Memo</value>
   </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>Discard</value>
+  </data>
+  <data name="RemindTomorrow" xml:space="preserve">
+    <value>Remind Tomorrow</value>
+  </data>
 </root>

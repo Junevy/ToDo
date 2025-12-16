@@ -200,4 +200,16 @@
     <value>Memo</value>
     <comment>Memo</comment>
   </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+    <comment>Completed</comment>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>Discard</value>
+    <comment>Discard</comment>
+  </data>
+  <data name="RemindTomorrow" xml:space="preserve">
+    <value>Remind Tomorrow</value>
+    <comment>RemindTomorrow</comment>
+  </data>
 </root>

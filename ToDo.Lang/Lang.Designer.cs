@@ -106,6 +106,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Completed 的本地化字符串。
+        /// </summary>
+        public static string Completed {
+            get {
+                return ResourceManager.GetString("Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Confirm Password 的本地化字符串。
         /// </summary>
         public static string ConfirmPassword {
@@ -120,6 +129,15 @@ namespace ToDo.Lang {
         public static string Dark {
             get {
                 return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Discard 的本地化字符串。
+        /// </summary>
+        public static string Discard {
+            get {
+                return ResourceManager.GetString("Discard", resourceCulture);
             }
         }
         
@@ -210,6 +228,15 @@ namespace ToDo.Lang {
         public static string RememberMe {
             get {
                 return ResourceManager.GetString("RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Remind Tomorrow 的本地化字符串。
+        /// </summary>
+        public static string RemindTomorrow {
+            get {
+                return ResourceManager.GetString("RemindTomorrow", resourceCulture);
             }
         }
         

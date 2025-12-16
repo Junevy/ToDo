@@ -2,6 +2,7 @@
     x:Class="ToDo.Client.Home.Views.HomeView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvt="clr-namespace:ToDo.Extensions.Converter;assembly=ToDo.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:ToDo.Extensions.Resx;assembly=ToDo.Extensions"
     xmlns:local="clr-namespace:ToDo.Client.Home.Views"
@@ -11,6 +12,10 @@
     d:DesignWidth="800"
     FontFamily="Arial"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <cvt:StateToColorConverter x:Key="StateToColorConverter" />
+    </UserControl.Resources>
 
     <Border
         Margin="2,10,0,0"
@@ -280,7 +285,7 @@
                 <!--  main  -->
                 <Grid
                     Grid.Row="1"
-                    Margin="0,0,0,10"
+                    Margin="0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
@@ -289,35 +294,99 @@
                     </Grid.ColumnDefinitions>
 
                     <!--  待办事项  -->
-                    <StackPanel
+                    <Grid 
                         Grid.Column="0"
-                        Margin="10,50,10,0"
+                        Margin="10,30,10,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition MaxHeight="40" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
                         <ui:TextBlock
                             Grid.Row="0"
-                            Margin="0,0,0,10"
+                            Margin="0"
                             Appearance="Primary"
                             FontTypography="Subtitle"
-                            Text="{lang:Resx Priority}" >
+                            Text="{lang:Resx Priority}">
                             <ui:TextBlock.Effect>
                                 <DropShadowEffect
                                     BlurRadius="30"
                                     Direction="90"
                                     Opacity="1"
                                     ShadowDepth="0"
-                                    Color="	#FF00FF" />
+                                    Color=" #FF00FF" />
                             </ui:TextBlock.Effect>
                         </ui:TextBlock>
-                    </StackPanel>
+
+                        <ui:DynamicScrollViewer Grid.Row="1">
+                            <ui:ListView ItemsSource="{Binding Priorities}" x:Name="Priorities" >
+                                <ui:ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            Margin="5"
+                                            Background="{Binding State, Converter={StaticResource StateToColorConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                            BorderThickness="1"
+                                            CornerRadius="10">
+
+                                            <ui:CardControl
+                                                Margin="0"
+                                                Padding="10,10,10,10"
+                                                Background="Transparent"
+                                                BorderBrush="Transparent">
+                                                <ui:CardControl.Header>
+                                                    <StackPanel>
+                                                        <ui:TextBlock
+                                                            Margin="0"
+                                                            FontSize="16"
+                                                            FontTypography="BodyStrong"
+                                                            Foreground="{DynamicResource DarkTextFill}"
+                                                            Text="{Binding Title}"
+                                                            TextWrapping="WrapWithOverflow" />
+                                                        <ui:TextBlock
+                                                            FontSize="12"
+                                                            Appearance="Secondary"
+                                                            Foreground="Black"
+                                                            Text="{Binding Description}"
+                                                            TextWrapping="WrapWithOverflow" />
+                                                    </StackPanel>
+                                                </ui:CardControl.Header>
+                                                <ui:DropDownButton
+                                                    BorderBrush="{DynamicResource DarkBorder}"
+                                                    Content="{Binding State}"
+                                                    Foreground="{DynamicResource DarkTextFill}"
+                                                    Icon="{ui:SymbolIcon WindowEdit16}">
+                                                    <ui:DropDownButton.Flyout>
+                                                        <ContextMenu FontWeight="Bold" FontFamily="Consolas">
+                                                            <MenuItem Foreground="Green" Header="{lang:Resx Completed}" Command="{Binding ChangeCompleted}" CommandParameter="{Binding Id}" />
+                                                            <MenuItem Foreground="Red" Header="{lang:Resx Priority}" />
+                                                            <MenuItem Foreground="CadetBlue" Header="{lang:Resx RemindTomorrow}"  />
+                                                            <MenuItem Foreground="Gray" Header="{lang:Resx Discard}"/>
+                                                        </ContextMenu>
+                                                    </ui:DropDownButton.Flyout>
+                                                </ui:DropDownButton>
+                                            </ui:CardControl>
+                                        </Border>
+                                    </DataTemplate>
+                                </ui:ListView.ItemTemplate>
+                            </ui:ListView>
+                        </ui:DynamicScrollViewer>
+                    </Grid>
 
                     <!--  备忘录  -->
-                    <StackPanel
+                    <Grid
                         Grid.Column="1"
-                        Margin="10,50,20,0"
+                        Margin="10,30,20,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
 
+                        <Grid.RowDefinitions>
+                            <RowDefinition MaxHeight="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
                         <ui:TextBlock
                             Grid.Row="0"
                             Margin="0,0,0,10"
@@ -335,10 +404,7 @@
                             </ui:TextBlock.Effect>
                         </ui:TextBlock>
 
-                        <ui:ListView ItemsSource="{Binding CardExpanders}">
-                            
-                        </ui:ListView>
-                    </StackPanel>
+                    </Grid>
                 </Grid>
 
 

@@ -180,4 +180,13 @@
   <data name="Memo" xml:space="preserve">
     <value>备忘录</value>
   </data>
+  <data name="Completed" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="RemindTomorrow" xml:space="preserve">
+    <value>推迟明日</value>
+  </data>
 </root>
