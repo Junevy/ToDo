@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
+using ToDo.Client.Home.ViewModels;
 using ToDo.Client.Home.Views;
 using ToDo.Client.Login.Views;
 using ToDo.Client.Services;
@@ -30,6 +31,7 @@ namespace ToDo.Client
             containerRegistry.RegisterForNavigation<HomeView>();
             containerRegistry.RegisterForNavigation<SettingsView>();
             containerRegistry.RegisterSingleton<SettingsViewModel>();
+            containerRegistry.RegisterSingleton<HomeViewModel>();
 
             // ===================================
             // Localization service 

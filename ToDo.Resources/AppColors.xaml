@@ -2,9 +2,16 @@
     <!--<SolidColorBrush x:Key="AppBackgroundBrush" Color="#1e1e1e"/>-->
     <SolidColorBrush x:Key="LightTextFill" Color=" #A9A9A9" />
     <SolidColorBrush x:Key="DarkTextFill" Color="	#200000" />
-    <SolidColorBrush x:Key="DarkBorder" Color="		#D3D3D3" />
+    <SolidColorBrush x:Key="DarkBorder" Color="#D3D3D3" />
 
-    
+    <SolidColorBrush x:Key="EmergencyText" Color="#FF6347" />
+    <SolidColorBrush x:Key="RemindTomorrowText" Color="#1E90FF" />
+    <SolidColorBrush x:Key="CompletedText" Color="	#3CB371" />
+    <SolidColorBrush x:Key="Discard" Color="#8B8989" />
+    <!--<SolidColorBrush x:Key="EmergencyText" Color="#FF6347" />-->
+
+
+
 
     <SolidColorBrush x:Key="LightSummaryCardFill" Color="#1e1e1e" />
     <SolidColorBrush x:Key="DarkSummaryCardFill" Color="#1e1e1e" />

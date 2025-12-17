@@ -212,4 +212,20 @@
     <value>Remind Tomorrow</value>
     <comment>RemindTomorrow</comment>
   </data>
+  <data name="AddPriority" xml:space="preserve">
+    <value>Add Priority</value>
+    <comment>AddPriority</comment>
+  </data>
+  <data name="EditProperty" xml:space="preserve">
+    <value>Edit Property</value>
+    <comment>Edit Property</comment>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normal</value>
+    <comment>Normal</comment>
+  </data>
+  <data name="PriorityThings" xml:space="preserve">
+    <value>Priority</value>
+    <comment>PriorityThings</comment>
+  </data>
 </root>

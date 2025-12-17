@@ -88,6 +88,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Add Priority 的本地化字符串。
+        /// </summary>
+        public static string AddPriority {
+            get {
+                return ResourceManager.GetString("AddPriority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Check Update 的本地化字符串。
         /// </summary>
         public static string CheckUpdate {
@@ -138,6 +147,15 @@ namespace ToDo.Lang {
         public static string Discard {
             get {
                 return ResourceManager.GetString("Discard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Edit Property 的本地化字符串。
+        /// </summary>
+        public static string EditProperty {
+            get {
+                return ResourceManager.GetString("EditProperty", resourceCulture);
             }
         }
         
@@ -205,6 +223,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Normal 的本地化字符串。
+        /// </summary>
+        public static string Normal {
+            get {
+                return ResourceManager.GetString("Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Password 的本地化字符串。
         /// </summary>
         public static string Password {
@@ -219,6 +246,15 @@ namespace ToDo.Lang {
         public static string Priority {
             get {
                 return ResourceManager.GetString("Priority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Priority 的本地化字符串。
+        /// </summary>
+        public static string PriorityThings {
+            get {
+                return ResourceManager.GetString("PriorityThings", resourceCulture);
             }
         }
         

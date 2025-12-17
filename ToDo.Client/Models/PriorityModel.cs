@@ -1,23 +1,37 @@
-﻿namespace ToDo.Client.Models
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ToDo.Client.Models
 {
-    public class PriorityModel : BindableBase
+    public class PriorityModel : INotifyPropertyChanged
     {
-        public static int Id { get; set; } = 0;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public Guid Id { get; }
 
         public PriorityModel()
         {
-            ChangeCompleted = new DelegateCommand<object>(ChangeToCompleted);
-
-            Id += 1;
+            Id = Guid.NewGuid();
+        }
+        public PriorityModel
+            (string title, string desciption, PriorityStatus status, TimeSpan insertTime, TimeSpan dDL)
+        {
+            Id = Guid.NewGuid();
+            Title = title;
+            Description = desciption;
+            State = status;
+            InsertTime = insertTime;
+            DDL = dDL;
         }
 
         private string title;
         public string Title
         {
             get => title;
-            set
+            private set
             {
-                SetProperty(ref title, value);
+                title = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
             }
         }
 
@@ -25,9 +39,11 @@
         public string Description
         {
             get => description;
-            set
+            private set
             {
-                SetProperty(ref description, value);
+                description = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description)));
+
             }
         }
 
@@ -35,18 +51,62 @@
         public PriorityStatus State
         {
             get => state;
-            set
+            private set
             {
-                SetProperty(ref state, value);
+                state = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(State)));
             }
         }
-        public DelegateCommand<object> ChangeCompleted { get; set; }
 
-
-        private void ChangeToCompleted(object itemIndex)
+        private TimeSpan insertTime;
+        public TimeSpan InsertTime
         {
-            var test = (int)itemIndex;
+            get => insertTime;
+            private set
+            {
+                insertTime = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(State)));
+            }
         }
 
+        private TimeSpan dDL;
+        public TimeSpan DDL
+        {
+            get => dDL;
+            private set
+            {
+                dDL = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DDL)));
+            }
+        }
+
+
+        public void Rename(string title)
+        {
+            if (title != null && title != Title)
+                Title = title;
+        }
+        public void ReDescription(string description)
+        {
+            if (description != null && description != Description)
+                Description = description;
+
+        }
+        public void ReState(PriorityStatus state)
+        {
+            if (state != State)
+                State = state;
+        }
+        public void ReInsertTime(TimeSpan insertTime)
+        {
+            if (insertTime != null && insertTime != InsertTime)
+                InsertTime = insertTime;
+
+        }
+        public void ReDDL(TimeSpan dDL)
+        {
+            if (dDL != null && dDL != DDL)
+                DDL = dDL;
+        }
     }
 }

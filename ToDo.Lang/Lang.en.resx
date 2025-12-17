@@ -189,4 +189,16 @@
   <data name="RemindTomorrow" xml:space="preserve">
     <value>Remind Tomorrow</value>
   </data>
+  <data name="AddPriority" xml:space="preserve">
+    <value>Add Priority</value>
+  </data>
+  <data name="EditProperty" xml:space="preserve">
+    <value>Edit Property</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="PriorityThings" xml:space="preserve">
+    <value>Priority</value>
+  </data>
 </root>

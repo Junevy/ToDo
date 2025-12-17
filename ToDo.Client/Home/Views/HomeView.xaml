@@ -8,6 +8,9 @@
     xmlns:local="clr-namespace:ToDo.Client.Home.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewmodels="clr-namespace:ToDo.Client.Home.ViewModels"
+    x:Name="HomeUserControl"
+    d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontFamily="Arial"
@@ -15,6 +18,7 @@
 
     <UserControl.Resources>
         <cvt:StateToColorConverter x:Key="StateToColorConverter" />
+        <cvt:PriorityCommandConverter x:Key="PriorityCommandConverter" />
     </UserControl.Resources>
 
     <Border
@@ -294,7 +298,7 @@
                     </Grid.ColumnDefinitions>
 
                     <!--  待办事项  -->
-                    <Grid 
+                    <Grid
                         Grid.Column="0"
                         Margin="10,30,10,0"
                         HorizontalAlignment="Stretch"
@@ -305,29 +309,56 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <ui:TextBlock
+                        <!--  title  -->
+                        <Grid
                             Grid.Row="0"
-                            Margin="0"
-                            Appearance="Primary"
-                            FontTypography="Subtitle"
-                            Text="{lang:Resx Priority}">
-                            <ui:TextBlock.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="30"
-                                    Direction="90"
-                                    Opacity="1"
-                                    ShadowDepth="0"
-                                    Color=" #FF00FF" />
-                            </ui:TextBlock.Effect>
-                        </ui:TextBlock>
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MaxWidth="110" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <ui:TextBlock
+                                Grid.Column="0"
+                                Margin="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Appearance="Primary"
+                                FontTypography="Subtitle"
+                                Text="{lang:Resx Priority}">
+                                <ui:TextBlock.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="30"
+                                        Direction="90"
+                                        Opacity="1"
+                                        ShadowDepth="0"
+                                        Color=" #FF00FF" />
+                                </ui:TextBlock.Effect>
+                            </ui:TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <ui:Button
+                                    Margin="0,0,10,5"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Icon="{ui:SymbolIcon TableAdd28}" />
+                                <ui:Button
+                                    Margin="0,0,0,5"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Icon="{ui:SymbolIcon WindowEdit16}" />
+                            </StackPanel>
+                        </Grid>
 
                         <ui:DynamicScrollViewer Grid.Row="1">
-                            <ui:ListView ItemsSource="{Binding Priorities}" x:Name="Priorities" >
-                                <ui:ListView.ItemTemplate>
+                            <ItemsControl x:Name="Priorities" ItemsSource="{Binding Priorities}">
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border
                                             Margin="5"
-                                            Background="{Binding State, Converter={StaticResource StateToColorConverter}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                            Background="{Binding State, Converter={StaticResource StateToColorConverter}, UpdateSourceTrigger=PropertyChanged}"
                                             BorderThickness="1"
                                             CornerRadius="10">
 
@@ -346,9 +377,8 @@
                                                             Text="{Binding Title}"
                                                             TextWrapping="WrapWithOverflow" />
                                                         <ui:TextBlock
-                                                            FontSize="12"
-                                                            Appearance="Secondary"
-                                                            Foreground="Black"
+                                                            FontSize="13"
+                                                            Foreground="{DynamicResource DarkTextFill}"
                                                             Text="{Binding Description}"
                                                             TextWrapping="WrapWithOverflow" />
                                                     </StackPanel>
@@ -359,19 +389,45 @@
                                                     Foreground="{DynamicResource DarkTextFill}"
                                                     Icon="{ui:SymbolIcon WindowEdit16}">
                                                     <ui:DropDownButton.Flyout>
-                                                        <ContextMenu FontWeight="Bold" FontFamily="Consolas">
-                                                            <MenuItem Foreground="Green" Header="{lang:Resx Completed}" Command="{Binding ChangeCompleted}" CommandParameter="{Binding Id}" />
-                                                            <MenuItem Foreground="Red" Header="{lang:Resx Priority}" />
-                                                            <MenuItem Foreground="CadetBlue" Header="{lang:Resx RemindTomorrow}"  />
-                                                            <MenuItem Foreground="Gray" Header="{lang:Resx Discard}"/>
+                                                        <ContextMenu FontFamily="Consolas" FontWeight="Bold">
+                                                            <MenuItem
+                                                                x:Name="Normal"
+                                                                Command="{Binding DataContext.ChangeToNormalCommand, Source={x:Reference HomeUserControl}}"
+                                                                CommandParameter="{Binding Id}"
+                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                                Header="{lang:Resx Normal}"/>
+
+                                                            <MenuItem
+                                                                Command="{Binding DataContext.ChangeToCompletedCommand, Source={x:Reference HomeUserControl}}"
+                                                                CommandParameter="{Binding Id}"
+                                                                Foreground="{DynamicResource CompletedText}"
+                                                                Header="{lang:Resx Completed}" />
+
+                                                            <MenuItem
+                                                                Command="{Binding DataContext.ChangeToEmergencyCommand, Source={x:Reference HomeUserControl}}"
+                                                                CommandParameter="{Binding Id}"
+                                                                Foreground="{DynamicResource EmergencyText}"
+                                                                Header="{lang:Resx PriorityThings}" />
+
+                                                            <MenuItem
+                                                                Command="{Binding DataContext.ChangeToRemindCommand, Source={x:Reference HomeUserControl}}"
+                                                                CommandParameter="{Binding Id}"
+                                                                Foreground="{DynamicResource RemindTomorrowText}"
+                                                                Header="{lang:Resx RemindTomorrow}" />
+
+                                                            <MenuItem
+                                                                Command="{Binding DataContext.ChangeToDiscardCommand, Source={x:Reference HomeUserControl}}"
+                                                                CommandParameter="{Binding Id}"
+                                                                Foreground="{DynamicResource Discard}"
+                                                                Header="{lang:Resx Discard}" />
                                                         </ContextMenu>
                                                     </ui:DropDownButton.Flyout>
                                                 </ui:DropDownButton>
                                             </ui:CardControl>
                                         </Border>
                                     </DataTemplate>
-                                </ui:ListView.ItemTemplate>
-                            </ui:ListView>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </ui:DynamicScrollViewer>
                     </Grid>
 
@@ -383,10 +439,10 @@
                         VerticalAlignment="Stretch">
 
                         <Grid.RowDefinitions>
-                            <RowDefinition MaxHeight="40"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition MaxHeight="40" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        
+
                         <ui:TextBlock
                             Grid.Row="0"
                             Margin="0,0,0,10"

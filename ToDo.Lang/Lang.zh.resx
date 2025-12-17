@@ -189,4 +189,16 @@
   <data name="RemindTomorrow" xml:space="preserve">
     <value>推迟明日</value>
   </data>
+  <data name="AddPriority" xml:space="preserve">
+    <value>添加待办</value>
+  </data>
+  <data name="EditProperty" xml:space="preserve">
+    <value>编辑待办</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="PriorityThings" xml:space="preserve">
+    <value>紧急</value>
+  </data>
 </root>

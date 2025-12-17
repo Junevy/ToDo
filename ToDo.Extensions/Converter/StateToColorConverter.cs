@@ -13,6 +13,7 @@ namespace ToDo.Extensions.Converter
         readonly SolidColorBrush completedBrush;
         readonly SolidColorBrush discardBursh;
         readonly SolidColorBrush remindMeBrush;
+        readonly SolidColorBrush NormalBrush;
 
         public StateToColorConverter()
         {
@@ -20,6 +21,7 @@ namespace ToDo.Extensions.Converter
             completedBrush = converter.ConvertFromString("#F0FFF0") as SolidColorBrush;
             discardBursh = converter.ConvertFromString("#F5F5F5") as SolidColorBrush;
             remindMeBrush = converter.ConvertFromString("#F0F8FF") as SolidColorBrush;
+            NormalBrush = converter.ConvertFromString("#FFFFFF") as SolidColorBrush;
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -36,6 +38,7 @@ namespace ToDo.Extensions.Converter
                 1 => priorityBrush,
                 2 => discardBursh,
                 3 => remindMeBrush,
+                4 => NormalBrush,
                 _ => discardBursh,
             };
 

@@ -5,6 +5,7 @@
         Completed,
         Priority,
         Discarded,
-        RemindTomorrow
+        RemindTomorrow,
+        Normal
     }
 }
