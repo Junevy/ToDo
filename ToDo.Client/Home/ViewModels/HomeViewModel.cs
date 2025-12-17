@@ -9,6 +9,7 @@ namespace ToDo.Client.Home.ViewModels
     public class HomeViewModel : BindableBase
     {
         private readonly ISnackbarService snackbarService;
+        private readonly IDialogService dialogService;
         public ObservableCollection<PriorityModel> Priorities { get; private set; } = [];
         public DelegateCommand<Guid?> ChangeToNormalCommand { get; set; }
         public DelegateCommand<Guid?> ChangeToRemindCommand { get; set; }
@@ -16,11 +17,13 @@ namespace ToDo.Client.Home.ViewModels
         public DelegateCommand<Guid?> ChangeToEmergencyCommand { get; set; }
         public DelegateCommand<Guid?> ChangeToCompletedCommand { get; set; }
         public DelegateCommand ShowSnackbarCommand { get; set; }
+        public DelegateCommand ShowAddPriorityCommand { get; set; }
 
-        public HomeViewModel(ISnackbarService snackbarService)
+        public HomeViewModel(ISnackbarService snackbarService, IDialogService dialogService)
         {
 
             this.snackbarService = snackbarService;
+            this.dialogService = dialogService;
             
             ChangeToNormalCommand = new(ChangeToNormal);
             ChangeToRemindCommand = new(ChangeToRemind);
@@ -29,7 +32,10 @@ namespace ToDo.Client.Home.ViewModels
             ChangeToCompletedCommand = new(ChangeToCompleted);
             ShowSnackbarCommand = new(ShowSnackBar);
 
-
+            ShowAddPriorityCommand = new(() =>
+            {
+                dialogService.ShowDialog("AddPriorityView");
+            });
             AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Priority, DateTime.Today, DateTime.Today);
             AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Normal, DateTime.Today, DateTime.Today);
 

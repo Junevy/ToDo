@@ -201,4 +201,16 @@
   <data name="PriorityThings" xml:space="preserve">
     <value>Priority</value>
   </data>
+  <data name="AddPriorityTitle" xml:space="preserve">
+    <value>Add Priority</value>
+  </data>
+  <data name="ChooseDDL" xml:space="preserve">
+    <value>ChooseDDL</value>
+  </data>
+  <data name="PriorityTip" xml:space="preserve">
+    <value>Input the title of Priority</value>
+  </data>
+  <data name="DescriptionTip" xml:space="preserve">
+    <value>What do you want to do?</value>
+  </data>
 </root>

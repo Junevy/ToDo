@@ -201,4 +201,16 @@
   <data name="PriorityThings" xml:space="preserve">
     <value>紧急</value>
   </data>
+  <data name="AddPriorityTitle" xml:space="preserve">
+    <value>添加待办</value>
+  </data>
+  <data name="ChooseDDL" xml:space="preserve">
+    <value>添加最后完成期限</value>
+  </data>
+  <data name="PriorityTip" xml:space="preserve">
+    <value>请输入待办事项标题</value>
+  </data>
+  <data name="DescriptionTip" xml:space="preserve">
+    <value>你想做什么？</value>
+  </data>
 </root>

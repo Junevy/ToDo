@@ -228,4 +228,20 @@
     <value>Priority</value>
     <comment>PriorityThings</comment>
   </data>
+  <data name="AddPriorityTitle" xml:space="preserve">
+    <value>Add Priority</value>
+    <comment>AddPriorityTitle</comment>
+  </data>
+  <data name="ChooseDDL" xml:space="preserve">
+    <value>Choose DDL</value>
+    <comment>ChooseDDL</comment>
+  </data>
+  <data name="PriorityTip" xml:space="preserve">
+    <value>Input the title of Priority</value>
+    <comment>ChooseDDL</comment>
+  </data>
+  <data name="DescriptionTip" xml:space="preserve">
+    <value>What do you want to do?</value>
+    <comment>DescriptionTip</comment>
+  </data>
 </root>

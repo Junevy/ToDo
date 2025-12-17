@@ -343,6 +343,7 @@
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                 <ui:Button
+                                    Command="{Binding ShowAddPriorityCommand}"
                                     Margin="0,0,10,5"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"

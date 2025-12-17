@@ -29,10 +29,12 @@ namespace ToDo.Client
             // ===================================
             containerRegistry.RegisterDialogWindow<DialogWindow>();
             containerRegistry.RegisterDialog<LoginView>();
-            containerRegistry.RegisterForNavigation<HomeView>();
-            containerRegistry.RegisterForNavigation<SettingsView>();
-            containerRegistry.RegisterSingleton<SettingsViewModel>();
-            containerRegistry.RegisterSingleton<HomeViewModel>();
+            containerRegistry.RegisterForNavigation<HomeView, HomeViewModel>();
+            containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
+            containerRegistry.RegisterDialog<AddPriorityView, AddPriorityViewModel>();
+
+            //containerRegistry.RegisterSingleton<SettingsViewModel>();
+            //containerRegistry.RegisterSingleton<HomeViewModel>();
 
             // ===================================
             // Localization service 
