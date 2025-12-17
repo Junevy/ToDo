@@ -14,7 +14,7 @@ namespace ToDo.Client.Models
             Id = Guid.NewGuid();
         }
         public PriorityModel
-            (string title, string desciption, PriorityStatus status, TimeSpan insertTime, TimeSpan dDL)
+            (string title, string desciption, PriorityStatus status, DateTime insertTime, DateTime dDL)
         {
             Id = Guid.NewGuid();
             Title = title;
@@ -58,8 +58,8 @@ namespace ToDo.Client.Models
             }
         }
 
-        private TimeSpan insertTime;
-        public TimeSpan InsertTime
+        private DateTime insertTime = DateTime.Now;
+        public DateTime InsertTime
         {
             get => insertTime;
             private set
@@ -69,14 +69,25 @@ namespace ToDo.Client.Models
             }
         }
 
-        private TimeSpan dDL;
-        public TimeSpan DDL
+        private DateTime dDL = DateTime.Now;
+        public DateTime DDL
         {
             get => dDL;
             private set
             {
                 dDL = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DDL)));
+            }
+        }
+
+        private DateTime completedTime = DateTime.Now;
+        public DateTime CompletedTime
+        {
+            get => completedTime;
+            private set
+            {
+                completedTime = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CompletedTime)));
             }
         }
 
@@ -97,16 +108,21 @@ namespace ToDo.Client.Models
             if (state != State)
                 State = state;
         }
-        public void ReInsertTime(TimeSpan insertTime)
+        public void ReInsertTime(DateTime insertTime)
         {
             if (insertTime != null && insertTime != InsertTime)
                 InsertTime = insertTime;
 
         }
-        public void ReDDL(TimeSpan dDL)
+        public void ReDDL(DateTime dDL)
         {
             if (dDL != null && dDL != DDL)
                 DDL = dDL;
+        }
+        public void ReCompletedTime(DateTime completedTime)
+        {
+            if (completedTime != null && completedTime != CompletedTime)
+                CompletedTime = completedTime;
         }
     }
 }

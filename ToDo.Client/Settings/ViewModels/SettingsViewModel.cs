@@ -1,4 +1,5 @@
-﻿using Wpf.Ui.Appearance;
+﻿using Wpf.Ui;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace ToDo.Client.Settings.ViewModels
@@ -37,6 +38,7 @@ namespace ToDo.Client.Settings.ViewModels
             this.localizationService = localizationService;
             ChangeLangCommand = new(ChangeLang);
         }
+
 
         private void ChangeLang(string culture)
             => localizationService.SetCulture(culture == "English" ? "en-Us" : "zh-CN");

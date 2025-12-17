@@ -1,44 +1,58 @@
 ﻿using System.Collections.ObjectModel;
+using System.Web.UI.WebControls;
 using ToDo.Client.Models;
+using Wpf.Ui;
+using Wpf.Ui.Controls;
 
 namespace ToDo.Client.Home.ViewModels
 {
     public class HomeViewModel : BindableBase
     {
+        private readonly ISnackbarService snackbarService;
         public ObservableCollection<PriorityModel> Priorities { get; private set; } = [];
         public DelegateCommand<Guid?> ChangeToNormalCommand { get; set; }
         public DelegateCommand<Guid?> ChangeToRemindCommand { get; set; }
         public DelegateCommand<Guid?> ChangeToDiscardCommand { get; set; }
         public DelegateCommand<Guid?> ChangeToEmergencyCommand { get; set; }
         public DelegateCommand<Guid?> ChangeToCompletedCommand { get; set; }
-        public DelegateCommand<ValueTuple<string, string>?> ChangeStatusCommand { get; set; }
+        public DelegateCommand ShowSnackbarCommand { get; set; }
 
-        public HomeViewModel()
+        public HomeViewModel(ISnackbarService snackbarService)
         {
+
+            this.snackbarService = snackbarService;
+            
             ChangeToNormalCommand = new(ChangeToNormal);
             ChangeToRemindCommand = new(ChangeToRemind);
             ChangeToDiscardCommand = new(ChangeToDiscard);
             ChangeToEmergencyCommand = new(ChangeToEmergency);
             ChangeToCompletedCommand = new(ChangeToCompleted);
+            ShowSnackbarCommand = new(ShowSnackBar);
 
-            ChangeStatusCommand = new(ChangeStatus);
 
-            AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Priority, TimeSpan.FromDays(22), TimeSpan.FromDays(24));
-            AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Normal, TimeSpan.FromDays(22), TimeSpan.FromDays(24));
+            AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Priority, DateTime.Today, DateTime.Today);
+            AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Normal, DateTime.Today, DateTime.Today);
 
         }
 
-        public void ChangeStatus(ValueTuple<string, string>? tuple)
+        private void ShowSnackBar()
         {
-            //tuple.Item1
+            //var test  = this.snackbarService.GetSnackbarPresenter();
+            snackbarService.Show(
+                "Importent Notification!",
+                "The notification just a simple and test notification.",
+                ControlAppearance.Primary,
+                new SymbolIcon(SymbolRegular.AlertOn24),
+                TimeSpan.FromSeconds(2)
+            );
         }
 
-
-        private void AddProperties(string title, string desciption, PriorityStatus status, TimeSpan insertTime, TimeSpan dDL)
+        private void AddProperties(string title, string desciption, PriorityStatus status, DateTime insertTime, DateTime dDL)
         {
             var model = new PriorityModel(title, desciption, status, insertTime, dDL);
             Priorities.Add(model);
         }
+
 
         #region change command
         private void ChangeToCompleted(Guid? gUid)

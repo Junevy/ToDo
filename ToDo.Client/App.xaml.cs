@@ -7,6 +7,7 @@ using ToDo.Client.Services;
 using ToDo.Client.Settings.ViewModels;
 using ToDo.Client.Settings.Views;
 using ToDo.WebAPI.HttpClient;
+using Wpf.Ui;
 using DialogWindow = ToDo.Client.Login.Views.DialogWindow;
 
 namespace ToDo.Client
@@ -42,6 +43,7 @@ namespace ToDo.Client
             // Tools
             // ===================================
             containerRegistry.GetContainer().Register<HttpRequestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
+            containerRegistry.RegisterSingleton<ISnackbarService, SnackbarService>();
         }
 
         protected override void OnInitialized()

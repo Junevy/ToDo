@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using Wpf.Ui;
 
 namespace ToDo.Client.Home.Views
 {
@@ -7,9 +8,17 @@ namespace ToDo.Client.Home.Views
     /// </summary>
     public partial class HomeView : UserControl
     {
+        //public HomeView(ISnackbarService snackbarService)
+        //{
+        //    InitializeComponent();
+
+        //    snackbarService.SetSnackbarPresenter(SnackbarPresenter);
+        //}
+
         public HomeView()
         {
             InitializeComponent();
+
         }
     }
 }

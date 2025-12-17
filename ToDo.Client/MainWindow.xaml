@@ -40,6 +40,9 @@
                 <ColumnDefinition MaxWidth="65" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+
+
+
             <!--  navigation  -->
             <ui:NavigationView
                 Grid.Column="0"
@@ -57,14 +60,22 @@
 
                 <ui:NavigationView.PaneFooter>
                     <Grid />
-                    --><!--  覆盖默认 Footer  --><!--
+                -->
+                <!--  覆盖默认 Footer  -->
+                <!--
                 </ui:NavigationView.PaneFooter>-->
+                <!--<ui:NavigationView.ContentOverlay>
+
+                </ui:NavigationView.ContentOverlay>-->
+
+
             </ui:NavigationView>
 
             <ContentControl Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
 
         </Grid>
-
+        <ui:SnackbarPresenter Grid.Row="1" x:Name="SnackbarPresenter"  />
 
     </Grid>
+
 </ui:FluentWindow>
