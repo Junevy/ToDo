@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using ToDo.Client.Models;
 using ToDo.WebAPI.DTOs;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
@@ -59,6 +60,15 @@ namespace ToDo.Client.Home.ViewModels
         {
             PriorityDTO.InsertTime = DateTime.MinValue;
             PriorityDTO.CompletedTime = null;
+
+            if (parameters.Count > 0)
+            {
+                var param = parameters.GetValue<PriorityModel>("param");
+                DtoTitle = param.Title;
+                Description = param.Description;
+                State = (int)param.State;
+                DDL = param.DDL;
+            }
         }
 
         public AddPriorityViewModel(ISnackbarService snackbarService)

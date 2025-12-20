@@ -22,7 +22,6 @@ namespace ToDo.Client
         {
             return Container.Resolve<MainWindow>();
         }
-
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // ===================================

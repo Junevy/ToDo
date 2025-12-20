@@ -252,4 +252,12 @@
     <value>Let me add a Priority</value>
     <comment>PriorityView</comment>
   </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Summary</value>
+    <comment>HomeViewModel</comment>
+  </data>
+  <data name="Percent" xml:space="preserve">
+    <value>Percent</value>
+    <comment>HomeViewModel</comment>
+  </data>
 </root>

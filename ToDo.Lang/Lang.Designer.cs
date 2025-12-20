@@ -277,6 +277,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Percent 的本地化字符串。
+        /// </summary>
+        public static string Percent {
+            get {
+                return ResourceManager.GetString("Percent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Priority 的本地化字符串。
         /// </summary>
         public static string Priority {
@@ -345,6 +354,15 @@ namespace ToDo.Lang {
         public static string SignIn {
             get {
                 return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Summary 的本地化字符串。
+        /// </summary>
+        public static string Summary {
+            get {
+                return ResourceManager.GetString("Summary", resourceCulture);
             }
         }
         

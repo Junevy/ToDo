@@ -219,4 +219,10 @@
   <data name="AddAPriority" xml:space="preserve">
     <value>让我们添加一个代办事项</value>
   </data>
+  <data name="Summary" xml:space="preserve">
+    <value>汇总</value>
+  </data>
+  <data name="Percent" xml:space="preserve">
+    <value>百分比</value>
+  </data>
 </root>

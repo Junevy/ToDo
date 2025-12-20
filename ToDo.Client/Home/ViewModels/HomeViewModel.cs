@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using ToDo.Client.Models;
 using ToDo.WebAPI.DTOs;
 using ToDo.WebAPI.HttpClient;
@@ -19,6 +20,8 @@ namespace ToDo.Client.Home.ViewModels
         // The priority list
         public ObservableCollection<PriorityModel> Priorities { get; private set; } = [];
 
+        public int CompletedCount => Priorities.Count(e => (e.State == PriorityStatus.Completed));
+
         #region change command
         public DelegateCommand<Guid?> ChangeToNormalCommand { get; set; }
         public DelegateCommand<Guid?> ChangeToRemindCommand { get; set; }
@@ -28,6 +31,7 @@ namespace ToDo.Client.Home.ViewModels
         #endregion
         public DelegateCommand ShowSnackbarCommand { get; set; }
         public DelegateCommand ShowAddPriorityCommand { get; set; }
+        public DelegateCommand<Guid?> EditPriorityCommand { get; set; }
 
         public HomeViewModel(ISnackbarService snackbarService, IDialogService dialogService, HttpRequestClient<PriorityDTO> client)
         {
@@ -42,6 +46,7 @@ namespace ToDo.Client.Home.ViewModels
             ChangeToEmergencyCommand = new(ChangeToEmergency);
             ChangeToCompletedCommand = new(ChangeToCompleted);
             ShowSnackbarCommand = new(ShowSnackBar);
+            EditPriorityCommand = new(EditPriority);
 
             ShowAddPriorityCommand = new(() =>
             {
@@ -59,11 +64,35 @@ namespace ToDo.Client.Home.ViewModels
         private void AddPriorityResultCallback(IDialogResult result)
         {
             var dto = result.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
-            _ = UpdatePriority(dto);
 
+            _ = AddPriority(dto).ContinueWith(t =>
+            {
+                if (t.Exception != null)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        System.Windows.MessageBox.Show(t.Exception.InnerException?.Message ?? "Save error!");
+                    });
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    UpdatePriority();
+                });
+            }, TaskScheduler.Default);
         }
 
-        private async Task UpdatePriority(PriorityDTO dto)
+        private void UpdatePriority()
+        {
+            var request = new Request<PriorityDTO>();
+        }
+
+        /// <summary>
+        /// Add Priority to database via WebAPI
+        /// </summary>
+        /// <param name="dto">DTO Model</param>
+        /// <returns>The result of add</returns>
+        private async Task AddPriority(PriorityDTO dto)
         {
             var request = new Request<PriorityDTO>()
             {
@@ -93,6 +122,17 @@ namespace ToDo.Client.Home.ViewModels
             await updateScs.ShowDialogAsync();
         }
 
+        private void EditPriority(Guid? id)
+        {
+
+            var e = Priorities.FirstOrDefault(e => e.Id == id);
+
+            DialogParameters param = new()
+            {
+                { "param", e }
+            };
+            dialogService.ShowDialog("AddPriorityView", param);
+        }
 
         /// <summary>
         /// Show Pop window when execute the command
@@ -129,6 +169,7 @@ namespace ToDo.Client.Home.ViewModels
             Priorities
                 .FirstOrDefault(e => e.Id == gUid)
                 ?.ReState(PriorityStatus.Completed);
+            RaisePropertyChanged(nameof(CompletedCount));
         }
 
         private void ChangeToEmergency(Guid? gUid)

@@ -219,4 +219,10 @@
   <data name="AddAPriority" xml:space="preserve">
     <value>Let me add a Priority</value>
   </data>
+  <data name="Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="Percent" xml:space="preserve">
+    <value>Percent</value>
+  </data>
 </root>
