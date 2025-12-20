@@ -213,4 +213,10 @@
   <data name="DescriptionTip" xml:space="preserve">
     <value>你想做什么？</value>
   </data>
+  <data name="SelectLevel" xml:space="preserve">
+    <value>选择程度</value>
+  </data>
+  <data name="AddAPriority" xml:space="preserve">
+    <value>让我们添加一个代办事项</value>
+  </data>
 </root>

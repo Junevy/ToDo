@@ -7,7 +7,7 @@ namespace ToDo.Client.Login.ViewModels
     internal class LoginViewModel : BindableBase, IDialogAware
     {
         private readonly IContainerRegistry container;
-        private readonly HttpRequestClient httpClient;
+        private readonly HttpRequestClient<AccountDTO> httpClient;
 
         public string Title => "Login";
         public DialogCloseListener RequestClose { get; set; }
@@ -30,7 +30,7 @@ namespace ToDo.Client.Login.ViewModels
         }
         #endregion
 
-        public LoginViewModel(IContainerRegistry container, HttpRequestClient client)
+        public LoginViewModel(IContainerRegistry container, HttpRequestClient<AccountDTO> client)
         {
             this.container = container;
             this.httpClient = client;
@@ -55,7 +55,7 @@ namespace ToDo.Client.Login.ViewModels
             }
 
             // 创建请求，设定 路由、请求方式、DTO
-            var request = new AccountRequest<AccountDTO>
+            var request = new Request<AccountDTO>
             {
                 Route = "/Users/Register",
                 Method = RestSharp.Method.POST,
@@ -103,7 +103,7 @@ namespace ToDo.Client.Login.ViewModels
             }
 
             // 创建请求，设定 路由、请求方式、DTO
-            var request = new AccountRequest<AccountDTO>
+            var request = new Request<AccountDTO>
             {
                 Route = $"/Users/Login?account={accountDTO.Account}&password={accountDTO.Password}",
                 Method = RestSharp.Method.GET,

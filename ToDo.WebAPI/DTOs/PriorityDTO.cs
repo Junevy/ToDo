@@ -3,12 +3,12 @@
     public class PriorityDTO
     {
         public string Title { get; set; }
-        public string Desciption { get; set; }
-        public int State { get; set; }
+        public string Description { get; set; }
+        public int State { get; set; } = -100;
 
-        public DateTime InsertTime { get; set; }
-        public DateTime CompletedTime { get; set; }
-        public DateTime DDL { get; set; }
+        public DateTime InsertTime { get; set; } = DateTime.Now;
+        public DateTime? CompletedTime { get; set; } = null;
+        public DateTime DDL { get; set; } = DateTime.Now.AddDays(1);
 
     }
 }

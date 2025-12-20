@@ -88,6 +88,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Let me add a Priority 的本地化字符串。
+        /// </summary>
+        public static string AddAPriority {
+            get {
+                return ResourceManager.GetString("AddAPriority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Add Priority 的本地化字符串。
         /// </summary>
         public static string AddPriority {
@@ -309,6 +318,15 @@ namespace ToDo.Lang {
         public static string RemindTomorrow {
             get {
                 return ResourceManager.GetString("RemindTomorrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Select Level 的本地化字符串。
+        /// </summary>
+        public static string SelectLevel {
+            get {
+                return ResourceManager.GetString("SelectLevel", resourceCulture);
             }
         }
         

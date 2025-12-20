@@ -14,7 +14,7 @@ namespace ToDo.Client.Models
             Id = Guid.NewGuid();
         }
         public PriorityModel
-            (string title, string desciption, PriorityStatus status, DateTime insertTime, DateTime dDL)
+            (string title, string desciption, PriorityStatus status, DateTime insertTime, DateTime dDL, DateTime completedTime)
         {
             Id = Guid.NewGuid();
             Title = title;
@@ -22,6 +22,7 @@ namespace ToDo.Client.Models
             State = status;
             InsertTime = insertTime;
             DDL = dDL;
+            CompletedTime = completedTime;
         }
 
         private string title;
@@ -58,7 +59,7 @@ namespace ToDo.Client.Models
             }
         }
 
-        private DateTime insertTime = DateTime.Now;
+        private DateTime insertTime;
         public DateTime InsertTime
         {
             get => insertTime;
@@ -80,7 +81,7 @@ namespace ToDo.Client.Models
             }
         }
 
-        private DateTime completedTime = DateTime.Now;
+        private DateTime completedTime;
         public DateTime CompletedTime
         {
             get => completedTime;

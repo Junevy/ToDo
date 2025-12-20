@@ -9,7 +9,7 @@ namespace ToDo.Client.Services
 
         public void SetCulture(string cultureName)
         {
-            var culture = new CultureInfo(cultureName);
+            var culture = new CultureInfo(cultureName == "English" ? "en-US" : "zh-CN");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 

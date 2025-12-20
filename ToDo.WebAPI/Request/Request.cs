@@ -2,7 +2,7 @@
 
 namespace ToDo.WebAPI.Request
 {
-    public class AccountRequest<T>
+    public class Request<T>
     {
         /// <summary>
         /// The path of request

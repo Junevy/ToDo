@@ -1,6 +1,6 @@
 ﻿namespace ToDo.WebAPI.Response
 {
-    public class AccountResponse<T>
+    public class Response<T>
     {
         /// <summary>
         /// The result code of response

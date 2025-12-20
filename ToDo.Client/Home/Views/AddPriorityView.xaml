@@ -2,6 +2,7 @@
     x:Class="ToDo.Client.Home.Views.AddPriorityView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvt="clr-namespace:ToDo.Extensions.Converter;assembly=ToDo.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:lang="clr-namespace:ToDo.Extensions.Resx;assembly=ToDo.Extensions"
     xmlns:local="clr-namespace:ToDo.Client.Home.Views"
@@ -13,8 +14,12 @@
     d:DataContext="{d:DesignInstance Type=vm:AddPriorityViewModel}"
     d:DesignHeight="300"
     d:DesignWidth="400"
-    
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <cvt:NumToStateConverter x:Key="NumToStateConverter" />
+        <cvt:StateToColorConverter x:Key="StateToColorConverter" />
+    </UserControl.Resources>
 
     <Grid>
 
@@ -25,7 +30,7 @@
 
         <!--  title  -->
         <Grid Grid.Row="0">
-            <ui:TitleBar Title="{lang:Resx AddPriorityTitle}" CloseWindowByDoubleClickOnIcon="True" >
+            <ui:TitleBar Title="{lang:Resx AddPriorityTitle}" CloseWindowByDoubleClickOnIcon="True">
                 <ui:TitleBar.Icon>
                     <ui:ImageIcon Source="/ToDo.Resources;component/AppIcon/icon.ico" />
                 </ui:TitleBar.Icon>
@@ -34,40 +39,80 @@
 
         <StackPanel
             Grid.Row="1"
-            Margin="10,50,10,10"
+            Margin="10,0,10,10"
             Orientation="Vertical">
+
+            <ui:TextBlock
+                Margin="0,0,0,20"
+                HorizontalAlignment="Center"
+                FontFamily="Arial Black"
+                FontTypography="Subtitle"
+                Text="{lang:Resx AddAPriority}" />
+
             <ui:TextBox
                 Width="300"
-                Height="40"
+                Height="30"
                 Margin="10"
                 HorizontalAlignment="Center"
                 PlaceholderText="{lang:Resx PriorityTip}"
-                Text="{Binding PriorityDTO.Title}" />
+                Text="{Binding DtoTitle}" />
 
-            <ui:TextBox TextWrapping="Wrap"
+            <ui:TextBox
                 Width="300"
                 Height="80"
                 Margin="10"
                 HorizontalAlignment="Center"
                 PlaceholderText="{lang:Resx DescriptionTip}"
-                Text="{Binding PriorityDTO.Desciption}" />
+                Text="{Binding Description}"
+                TextWrapping="Wrap" />
 
             <ui:CalendarDatePicker
+                x:Name="DatePicker"
                 Width="300"
                 Height="40"
-                Margin="10"
+                Margin="0,10,0,5"
                 HorizontalAlignment="Center"
-                Content="{lang:Resx ChooseDDL}" />
+                Content="{lang:Resx ChooseDDL}"
+                Date="{Binding DDL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-            <ui:DropDownButton Width="300" Height="40" HorizontalAlignment="Center" Content="DropButton" >
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontFamily="Arial Black"
+                Text="{Binding ElementName=DatePicker, Path=Date}" />
+
+            <ui:DropDownButton
+                x:Name="level"
+                Width="300"
+                Height="40"
+                Margin="0,20,0,0"
+                HorizontalAlignment="Center"
+                Background="{Binding State, Converter={StaticResource StateToColorConverter}}"
+                Content="{Binding State, Converter={StaticResource NumToStateConverter}}"
+                FontFamily="Arial"
+                Foreground="{DynamicResource DarkTextFill}">
                 <ui:DropDownButton.Flyout>
                     <ContextMenu IsTextSearchEnabled="True">
-                        <MenuItem Header="test"/>
-                        <MenuItem Header="test"/>
-                        <MenuItem Header="test"/>
+                        <MenuItem
+                            x:Name="emergency"
+                            Command="{Binding SelectLevelCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Name}"
+                            Header="{lang:Resx PriorityThings}" />
+                        <MenuItem
+                            x:Name="normal"
+                            Command="{Binding SelectLevelCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Name}"
+                            Header="{lang:Resx Normal}" />
                     </ContextMenu>
                 </ui:DropDownButton.Flyout>
             </ui:DropDownButton>
+
+            <Button
+                Width="120"
+                Height="40"
+                Margin="0,20,0,0"
+                HorizontalAlignment="Center"
+                Command="{Binding AddPriorityCommand}"
+                Content="{lang:Resx AddPriority}" />
         </StackPanel>
 
     </Grid>

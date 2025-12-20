@@ -1,5 +1,4 @@
-﻿using Wpf.Ui;
-using Wpf.Ui.Appearance;
+﻿using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace ToDo.Client.Settings.ViewModels
@@ -7,6 +6,13 @@ namespace ToDo.Client.Settings.ViewModels
     public class SettingsViewModel : BindableBase, INavigationAware
     {
         private readonly ILocalizationService localizationService;
+
+        //private int _langVersion;
+        //public int LangVersion
+        //{
+        //    get => _langVersion;
+        //    set => SetProperty(ref _langVersion, value);
+        //}
 
         private bool theme = false;
         public bool Theme
@@ -41,7 +47,7 @@ namespace ToDo.Client.Settings.ViewModels
 
 
         private void ChangeLang(string culture)
-            => localizationService.SetCulture(culture == "English" ? "en-Us" : "zh-CN");
+            => localizationService.SetCulture(culture);
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {

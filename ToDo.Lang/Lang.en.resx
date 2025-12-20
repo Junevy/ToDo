@@ -205,12 +205,18 @@
     <value>Add Priority</value>
   </data>
   <data name="ChooseDDL" xml:space="preserve">
-    <value>ChooseDDL</value>
+    <value>Choose DDL</value>
   </data>
   <data name="PriorityTip" xml:space="preserve">
     <value>Input the title of Priority</value>
   </data>
   <data name="DescriptionTip" xml:space="preserve">
     <value>What do you want to do?</value>
+  </data>
+  <data name="SelectLevel" xml:space="preserve">
+    <value>Select Level</value>
+  </data>
+  <data name="AddAPriority" xml:space="preserve">
+    <value>Let me add a Priority</value>
   </data>
 </root>

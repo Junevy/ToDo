@@ -244,4 +244,12 @@
     <value>What do you want to do?</value>
     <comment>DescriptionTip</comment>
   </data>
+  <data name="SelectLevel" xml:space="preserve">
+    <value>Select Level</value>
+    <comment>PriorityView</comment>
+  </data>
+  <data name="AddAPriority" xml:space="preserve">
+    <value>Let me add a Priority</value>
+    <comment>PriorityView</comment>
+  </data>
 </root>
