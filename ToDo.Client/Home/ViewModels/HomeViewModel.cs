@@ -22,14 +22,10 @@ namespace ToDo.Client.Home.ViewModels
 
         public int CompletedCount => Priorities.Count(e => (e.State == PriorityStatus.Completed));
 
-        #region change command
-        public DelegateCommand<Guid?> ChangeToNormalCommand { get; set; }
-        public DelegateCommand<Guid?> ChangeToRemindCommand { get; set; }
-        public DelegateCommand<Guid?> ChangeToDiscardCommand { get; set; }
-        public DelegateCommand<Guid?> ChangeToEmergencyCommand { get; set; }
-        public DelegateCommand<Guid?> ChangeToCompletedCommand { get; set; }
-        #endregion
         public DelegateCommand ShowSnackbarCommand { get; set; }
+        public DelegateCommand<object[]?> ChangeCommand { get; set; }
+
+        
         public DelegateCommand ShowAddPriorityCommand { get; set; }
         public DelegateCommand<Guid?> EditPriorityCommand { get; set; }
 
@@ -40,13 +36,9 @@ namespace ToDo.Client.Home.ViewModels
             this.dialogService = dialogService;
             this.httpClient = client;
 
-            ChangeToNormalCommand = new(ChangeToNormal);
-            ChangeToRemindCommand = new(ChangeToRemind);
-            ChangeToDiscardCommand = new(ChangeToDiscard);
-            ChangeToEmergencyCommand = new(ChangeToEmergency);
-            ChangeToCompletedCommand = new(ChangeToCompleted);
             ShowSnackbarCommand = new(ShowSnackBar);
             EditPriorityCommand = new(EditPriority);
+            ChangeCommand = new(Change);
 
             ShowAddPriorityCommand = new(() =>
             {
@@ -55,6 +47,28 @@ namespace ToDo.Client.Home.ViewModels
             AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Priority, DateTime.Today, DateTime.Today, DateTime.Today);
             AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Normal, DateTime.Today, DateTime.Today, DateTime.Today);
 
+        }
+
+        /// <summary>
+        /// Change the status of priorities
+        /// </summary>
+        /// <param name="obj"></param>
+        private void Change(object[]? obj)
+        {
+            var level = ((string)obj[0]) ?? "RemindTomorrow";
+            var model = (PriorityModel)obj[1];
+
+            var state = level switch
+            {
+                "Normal" => PriorityStatus.Normal,
+                "Priority" => PriorityStatus.Priority,
+                "Discard" => PriorityStatus.Discarded,
+                "RemindTomorrow" => PriorityStatus.RemindTomorrow,
+                "Completed" => PriorityStatus.Completed,
+                _ => PriorityStatus.RemindTomorrow,
+            };
+
+            model.ReState(state);
         }
 
         /// <summary>
@@ -122,6 +136,11 @@ namespace ToDo.Client.Home.ViewModels
             await updateScs.ShowDialogAsync();
         }
 
+
+        /// <summary>
+        /// Command of the Double click priority. Edit the priority
+        /// </summary>
+        /// <param name="id"></param>
         private void EditPriority(Guid? id)
         {
 
@@ -162,45 +181,6 @@ namespace ToDo.Client.Home.ViewModels
             Priorities.Add(model);
         }
 
-
-        #region change command
-        private void ChangeToCompleted(Guid? gUid)
-        {
-            Priorities
-                .FirstOrDefault(e => e.Id == gUid)
-                ?.ReState(PriorityStatus.Completed);
-            RaisePropertyChanged(nameof(CompletedCount));
-        }
-
-        private void ChangeToEmergency(Guid? gUid)
-        {
-            Priorities
-                .FirstOrDefault(e => e.Id == gUid)
-                ?.ReState(PriorityStatus.Priority);
-        }
-
-        private void ChangeToDiscard(Guid? gUid)
-        {
-            Priorities
-                .FirstOrDefault(e => e.Id == gUid)
-                ?.ReState(PriorityStatus.Discarded);
-        }
-
-        private void ChangeToRemind(Guid? gUid)
-        {
-            Priorities
-                .FirstOrDefault(e => e.Id == gUid)
-                ?.ReState(PriorityStatus.RemindTomorrow);
-        }
-
-        private void ChangeToNormal(Guid? gUid)
-        {
-            Priorities
-                .FirstOrDefault(e => e.Id == gUid)
-                ?.ReState(PriorityStatus.Normal);
-        }
-
-        #endregion
 
     }
 }

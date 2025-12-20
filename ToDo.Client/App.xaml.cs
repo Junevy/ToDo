@@ -52,7 +52,7 @@ namespace ToDo.Client
 
         protected override void OnInitialized()
         {
-            var culture = new CultureInfo("zh-CN");
+            var culture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 

@@ -55,7 +55,11 @@ namespace ToDo.Client.Home.ViewModels
         public void OnDialogClosed()
         {
         }
-
+        
+        /// <summary>
+        /// Fill the params when parameters is not null
+        /// </summary>
+        /// <param name="parameters"></param>
         public void OnDialogOpened(IDialogParameters parameters)
         {
             PriorityDTO.InsertTime = DateTime.MinValue;

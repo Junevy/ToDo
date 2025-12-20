@@ -20,6 +20,7 @@
     <UserControl.Resources>
         <cvt:StateToColorConverter x:Key="StateToColorConverter" />
         <cvt:PriorityCommandConverter x:Key="PriorityCommandConverter" />
+        <cvt:MultiMenuConverter x:Key="MultiMenuConverter" />
         <!--<viewmodels:PriorityCommandArgs x:Key="PriorityCommandArgs"/>-->
     </UserControl.Resources>
 
@@ -302,7 +303,7 @@
                     <!--  待办事项  -->
                     <Grid
                         Grid.Column="0"
-                        Margin="10,30,10,0"
+                        Margin="10,0,10,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
 
@@ -417,34 +418,68 @@
                                                         <ContextMenu FontFamily="Consolas" FontWeight="Bold">
                                                             <MenuItem
                                                                 x:Name="Normal"
-                                                                Command="{Binding DataContext.ChangeToNormalCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                                Header="{lang:Resx Normal}" />
+                                                                Header="{lang:Resx Normal}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToCompletedCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="Completed"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource CompletedText}"
-                                                                Header="{lang:Resx Completed}" />
+                                                                Header="{lang:Resx Completed}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToEmergencyCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="Priority"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource EmergencyText}"
-                                                                Header="{lang:Resx PriorityThings}" />
+                                                                Header="{lang:Resx PriorityThings}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToRemindCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="RemindTomorrow"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource RemindTomorrowText}"
-                                                                Header="{lang:Resx RemindTomorrow}" />
+                                                                Header="{lang:Resx RemindTomorrow}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToDiscardCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="Discard"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource Discard}"
-                                                                Header="{lang:Resx Discard}" />
+                                                                Header="{lang:Resx Discard}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
                                                         </ContextMenu>
                                                     </ui:DropDownButton.Flyout>
                                                 </ui:DropDownButton>
@@ -459,7 +494,7 @@
                     <!--  备忘录  -->
                     <Grid
                         Grid.Column="1"
-                        Margin="10,30,20,0"
+                        Margin="10,0,20,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
 
@@ -538,34 +573,68 @@
                                                         <ContextMenu FontFamily="Consolas" FontWeight="Bold">
                                                             <MenuItem
                                                                 x:Name="Normal"
-                                                                Command="{Binding DataContext.ChangeToNormalCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                                                Header="{lang:Resx Normal}" />
+                                                                Header="{lang:Resx Normal}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToCompletedCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="Completed"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource CompletedText}"
-                                                                Header="{lang:Resx Completed}" />
+                                                                Header="{lang:Resx Completed}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToEmergencyCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="Priority"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource EmergencyText}"
-                                                                Header="{lang:Resx PriorityThings}" />
+                                                                Header="{lang:Resx PriorityThings}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToRemindCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="RemindTomorrow"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource RemindTomorrowText}"
-                                                                Header="{lang:Resx RemindTomorrow}" />
+                                                                Header="{lang:Resx RemindTomorrow}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
 
                                                             <MenuItem
-                                                                Command="{Binding DataContext.ChangeToDiscardCommand, Source={x:Reference HomeUserControl}}"
-                                                                CommandParameter="{Binding Id}"
+                                                                x:Name="Discard"
+                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource Discard}"
-                                                                Header="{lang:Resx Discard}" />
+                                                                Header="{lang:Resx Discard}">
+                                                                <MenuItem.CommandParameter>
+                                                                    <MultiBinding Converter="{StaticResource MultiMenuConverter}">
+                                                                        <Binding Path="Name" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}" />
+                                                                    </MultiBinding>
+                                                                </MenuItem.CommandParameter>
+                                                            </MenuItem>
                                                         </ContextMenu>
                                                     </ui:DropDownButton.Flyout>
                                                 </ui:DropDownButton>
