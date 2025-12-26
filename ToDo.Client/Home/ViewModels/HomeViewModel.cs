@@ -25,10 +25,12 @@ namespace ToDo.Client.Home.ViewModels
         public ObservableCollection<PriorityModel> Priorities { get; private set; } = [];
         public ObservableCollection<PriorityModel> Memos { get; private set; } = [];
 
-        public int CompletedCount { get; private set; }
-        public int SummaryCount { get; private set; }
-        public string Percentage { get; private set; }
-        public int MemosCount { get; private set; }
+        public MainInfoModel InfoModel { get; private set; }
+
+        public int CompletedCount => Priorities.Where(t => t.State == 0).Count();
+        public int SummaryCount => Priorities.Count() + Memos.Count();
+        public string Percentage => (CompletedCount * 100 / (SummaryCount == 0 ? 1 : SummaryCount)).ToString("f2") + "%";
+        public int MemosCount => Memos.Count();
 
 
         //public DelegateCommand ShowSnackbarCommand { get; set; }
@@ -77,10 +79,19 @@ namespace ToDo.Client.Home.ViewModels
                 _ => PriorityStatus.RemindTomorrow,
             };
 
-            //model.ReState();
             model.State = state;
-            RaisePropertyChanged(nameof(CompletedCount));
-            //RaisePropertyChanged(nameof(model));
+            if (model.State == PriorityStatus.Completed)
+            {
+                Priorities.Remove(model);
+            }
+
+
+            var test  = Priorities.OrderBy(t => t.State).ToList();
+            Priorities.Clear();
+            Priorities.AddRange(test);
+
+            
+            OnMainInfoUpdated();
         }
 
         /// <summary>
@@ -122,16 +133,17 @@ namespace ToDo.Client.Home.ViewModels
                 return;
             }
 
-            OnMainInfoUpdated(response.Data);
             UpdatePriorities(response.Data.Priorities);
+            OnMainInfoUpdated();
+
         }
 
-        private void OnMainInfoUpdated(MainInfoDTO dto)
+        /// <summary>
+        /// 当数据刷新后，更新UI
+        /// </summary>
+        /// <param name="dto"></param>
+        private void OnMainInfoUpdated()
         {
-            CompletedCount = dto.CompletedCount;
-            SummaryCount = dto.SummaryCount;
-            Percentage = dto.Percentage;
-            MemosCount = dto.MemosCount;
 
             RaisePropertyChanged(nameof(CompletedCount));
             RaisePropertyChanged(nameof(SummaryCount));
@@ -139,6 +151,10 @@ namespace ToDo.Client.Home.ViewModels
             RaisePropertyChanged(nameof(MemosCount));
         }
 
+        /// <summary>
+        /// 分类Memos和Priorities
+        /// </summary>
+        /// <param name="priorities">Memos和Priorities的集合（可枚举对象）</param>
         private void UpdatePriorities(IEnumerable<PriorityDTO> priorities)
         {
             Priorities.Clear();

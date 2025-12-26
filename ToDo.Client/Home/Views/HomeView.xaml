@@ -528,7 +528,7 @@
                         </ui:TextBlock>
 
                         <ui:DynamicScrollViewer Grid.Row="1">
-                            <ItemsControl x:Name="Memo" ItemsSource="{Binding Priorities}">
+                            <ItemsControl x:Name="Memo" ItemsSource="{Binding Memos}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border

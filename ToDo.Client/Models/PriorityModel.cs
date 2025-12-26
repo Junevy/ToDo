@@ -1,6 +1,6 @@
 ﻿namespace ToDo.Client.Models
 {
-    public class PriorityModel
+    public class PriorityModel : BindableBase
     {
         public Guid Id { get; }
 
@@ -24,78 +24,49 @@
         public string Title
         {
             get => title;
-            set
-            {
-                if (value != null && title != value)
-                    title = value;
-            }
+            set => SetProperty(ref title, value);
         }
 
         private string description;
         public string Description
         {
             get => description;
-            set
-            {
-                if (value != null && description != value)
-                    description = value;
-
-            }
+            set => SetProperty(ref description, value);
         }
 
         private PriorityStatus state;
         public PriorityStatus State
         {
             get => state;
-            set
-            {
-                if (state != value)
-                    state = value;
-            }
+            set => SetProperty(ref state, value);
         }
 
         private DateTime insertTime;
         public DateTime InsertTime
         {
             get => insertTime;
-            set
-            {
-                if (value != null && insertTime != value)
-                    insertTime = value;
-            }
+            set => SetProperty(ref insertTime, value);
         }
 
         private DateTime dDL = DateTime.Now;
         public DateTime DDL
         {
             get => dDL;
-            set
-            {
-                if (value != null && dDL != value)
-                    dDL = value;
-            }
+            set => SetProperty(ref dDL, value);
         }
 
         private DateTime? completedTime;
         public DateTime? CompletedTime
         {
             get => completedTime;
-            set
-            {
-                if (value != null && completedTime != value)
-                    completedTime = value;
-            }
+            set => SetProperty(ref completedTime, value);
         }
 
         private int kind;
         public int Kind
         {
             get => kind;
-            set
-            {
-                if (kind != value)
-                    kind = value;
-            }
+            set => SetProperty(ref kind, value);
         }
     }
 }
