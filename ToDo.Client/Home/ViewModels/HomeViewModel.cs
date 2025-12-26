@@ -1,9 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Media;
 using ToDo.Client.Models;
+using ToDo.Client.Services;
 using ToDo.WebAPI.DTOs;
 using ToDo.WebAPI.HttpClient;
 using ToDo.WebAPI.Request;
+using ToDo.WebAPI.Response;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
@@ -12,48 +15,54 @@ namespace ToDo.Client.Home.ViewModels
     public class HomeViewModel : BindableBase
     {
         private readonly IDialogService dialogService;
-        private readonly HttpRequestClient<PriorityDTO> httpClient;
+        private readonly NotificationService notify;
+        private readonly HttpService httpService;
 
         // Pop window object
         private readonly ISnackbarService snackbarService;
 
         // The priority list
         public ObservableCollection<PriorityModel> Priorities { get; private set; } = [];
+        public ObservableCollection<PriorityModel> Memos { get; private set; } = [];
 
-        public int CompletedCount => Priorities.Count(e => (e.State == PriorityStatus.Completed));
+        public int CompletedCount { get; private set; }
+        public int SummaryCount { get; private set; }
+        public string Percentage { get; private set; }
+        public int MemosCount { get; private set; }
 
-        public DelegateCommand ShowSnackbarCommand { get; set; }
-        public DelegateCommand<object[]?> ChangeCommand { get; set; }
 
-        
+        //public DelegateCommand ShowSnackbarCommand { get; set; }
+        public DelegateCommand<object[]?> ChangeStatusCommand { get; set; }
         public DelegateCommand ShowAddPriorityCommand { get; set; }
+        public AsyncDelegateCommand RefreshCommand { get; set; }
         public DelegateCommand<Guid?> EditPriorityCommand { get; set; }
 
-        public HomeViewModel(ISnackbarService snackbarService, IDialogService dialogService, HttpRequestClient<PriorityDTO> client)
+        public HomeViewModel(ISnackbarService snackbarService,
+            IDialogService dialogService,
+            HttpService httpService,
+            NotificationService notify)
         {
-
             this.snackbarService = snackbarService;
             this.dialogService = dialogService;
-            this.httpClient = client;
+            this.httpService = httpService;
+            this.notify = notify;
 
-            ShowSnackbarCommand = new(ShowSnackBar);
+            //ShowSnackbarCommand = new(ShowSnackBar);
             EditPriorityCommand = new(EditPriority);
-            ChangeCommand = new(Change);
+            ChangeStatusCommand = new(ChangePriorityStatus);
+            RefreshCommand = new(RefreshPriorityAsync);
 
             ShowAddPriorityCommand = new(() =>
             {
                 dialogService.ShowDialog("AddPriorityView", AddPriorityResultCallback);
             });
-            AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Priority, DateTime.Today, DateTime.Today, DateTime.Today);
-            AddProperties("Bug fix", "Fix the ui bugs when today.", PriorityStatus.Normal, DateTime.Today, DateTime.Today, DateTime.Today);
-
         }
 
         /// <summary>
         /// Change the status of priorities
         /// </summary>
-        /// <param name="obj"></param>
-        private void Change(object[]? obj)
+        /// <param name="obj">The level of selected item</param>
+        private void ChangePriorityStatus(object[]? obj)
         {
             var level = ((string)obj[0]) ?? "RemindTomorrow";
             var model = (PriorityModel)obj[1];
@@ -68,7 +77,10 @@ namespace ToDo.Client.Home.ViewModels
                 _ => PriorityStatus.RemindTomorrow,
             };
 
-            model.ReState(state);
+            //model.ReState();
+            model.State = state;
+            RaisePropertyChanged(nameof(CompletedCount));
+            //RaisePropertyChanged(nameof(model));
         }
 
         /// <summary>
@@ -83,20 +95,70 @@ namespace ToDo.Client.Home.ViewModels
             {
                 if (t.Exception != null)
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
+                    Application.Current.Dispatcher.BeginInvoke(async () =>
                     {
-                        System.Windows.MessageBox.Show(t.Exception.InnerException?.Message ?? "Save error!");
+                        await notify.ShowMessageAsync(TitleType.Error, t.Exception.InnerException?.Message ?? "Sign in error!");
+                        return;
                     });
                 }
 
-                Application.Current.Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher.BeginInvoke(async () =>
                 {
-                    UpdatePriority();
+                    await RefreshPriorityAsync();
                 });
             }, TaskScheduler.Default);
         }
 
-        private void UpdatePriority()
+        /// <summary>
+        /// Re-fresh priorities from database when add or update and delete priorities after.
+        /// </summary>
+        private async Task RefreshPriorityAsync()
+        {
+            var response = await httpService.GetRequestAsync<MainInfoDTO>("/Priority/Get");
+
+            if (response.Code != 1)
+            {
+                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Refresh Failed!");
+                return;
+            }
+
+            OnMainInfoUpdated(response.Data);
+            UpdatePriorities(response.Data.Priorities);
+        }
+
+        private void OnMainInfoUpdated(MainInfoDTO dto)
+        {
+            CompletedCount = dto.CompletedCount;
+            SummaryCount = dto.SummaryCount;
+            Percentage = dto.Percentage;
+            MemosCount = dto.MemosCount;
+
+            RaisePropertyChanged(nameof(CompletedCount));
+            RaisePropertyChanged(nameof(SummaryCount));
+            RaisePropertyChanged(nameof(Percentage));
+            RaisePropertyChanged(nameof(MemosCount));
+        }
+
+        private void UpdatePriorities(IEnumerable<PriorityDTO> priorities)
+        {
+            Priorities.Clear();
+            Memos.Clear();
+
+            foreach (var p in priorities)
+            {
+                if (p.Kind != 0)
+                {
+                    Memos.Add(p.ToModel());
+                    continue;
+                }
+                Priorities.Add(p.ToModel());
+            }
+        }
+
+        /// <summary>
+        /// Change priority and update priority to database.
+        /// </summary>
+        private void UpdatePriority(IDialogResult result)
         {
             var request = new Request<PriorityDTO>();
         }
@@ -108,34 +170,16 @@ namespace ToDo.Client.Home.ViewModels
         /// <returns>The result of add</returns>
         private async Task AddPriority(PriorityDTO dto)
         {
-            var request = new Request<PriorityDTO>()
-            {
-                Route = "/Priority/Add",
-                Method = RestSharp.Method.POST,
-                Params = dto
-            };
-
-            var response = await httpClient.ExecuteAsync(request);
+            var response = await httpService.PostRequestAsync<PriorityDTO>("/Priority/Add", dto);
 
             if (response.Code != 1)
             {
-                var updateError = new Wpf.Ui.Controls.MessageBox
-                {
-                    Title = "Error",
-                    Content = response.Message ?? "Sign in error!"
-                };
-                await updateError.ShowDialogAsync();
+                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Add Failed!");
                 return;
             }
 
-            var updateScs = new Wpf.Ui.Controls.MessageBox
-            {
-                Title = "Notification",
-                Content = response.Message
-            };
-            await updateScs.ShowDialogAsync();
+            await notify.ShowMessageAsync("Notification", response.Message ?? "Add Successful!");
         }
-
 
         /// <summary>
         /// Command of the Double click priority. Edit the priority
@@ -150,37 +194,21 @@ namespace ToDo.Client.Home.ViewModels
             {
                 { "param", e }
             };
-            dialogService.ShowDialog("AddPriorityView", param);
+            dialogService.ShowDialog("AddPriorityView", param, UpdatePriority);
         }
 
         /// <summary>
         /// Show Pop window when execute the command
         /// </summary>
-        private void ShowSnackBar()
+        private void ShowSnackBar(string title, string message, IconElement? icon = null, int keepSeconds = 2)
         {
             snackbarService.Show(
-                "Importent Notification!",
-                "The notification just a simple and test notification.",
+                title,
+                message,
                 ControlAppearance.Primary,
-                new SymbolIcon(SymbolRegular.AlertOn24),
-                TimeSpan.FromSeconds(2)
+                icon ?? new SymbolIcon(SymbolRegular.AlertOn24),
+                TimeSpan.FromSeconds(keepSeconds)
             );
         }
-
-        /// <summary>
-        /// Add the Priority function
-        /// </summary>
-        /// <param name="title">Title </param>
-        /// <param name="desciption">Descripton</param>
-        /// <param name="status">The level of priority</param>
-        /// <param name="insertTime">The time of add</param>
-        /// <param name="dDL">The time of except completed</param>
-        private void AddProperties(string title, string desciption, PriorityStatus status, DateTime insertTime, DateTime dDL, DateTime completedTime)
-        {
-            var model = new PriorityModel(title, desciption, status, insertTime, dDL, completedTime);
-            Priorities.Add(model);
-        }
-
-
     }
 }

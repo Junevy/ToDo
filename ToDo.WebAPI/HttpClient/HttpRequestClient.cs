@@ -5,17 +5,12 @@ using ToDo.WebAPI.Response;
 
 namespace ToDo.WebAPI.HttpClient
 {
-    public class HttpRequestClient<T>
+    public class HttpRequestClient(string routeHead)
     {
-        private readonly RestClient client;
-        private readonly string routeHead = "http://localhost:6338/api";
+        private readonly RestClient client = new();
+        private readonly string routeHead = routeHead;
 
-        public HttpRequestClient()
-        {
-            client = new();
-        }
-
-        public async Task<Response<T>> ExecuteAsync(Request<T> request)
+        public async Task<Response<T>> ExecuteAsync<T>(Request<T> request)
         {
             var re = new RestRequest(request.Method);
 

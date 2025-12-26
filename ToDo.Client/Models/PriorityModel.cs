@@ -1,12 +1,7 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace ToDo.Client.Models
+﻿namespace ToDo.Client.Models
 {
-    public class PriorityModel : INotifyPropertyChanged
+    public class PriorityModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public Guid Id { get; }
 
         public PriorityModel()
@@ -29,10 +24,10 @@ namespace ToDo.Client.Models
         public string Title
         {
             get => title;
-            private set
+            set
             {
-                title = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
+                if (value != null && title != value)
+                    title = value;
             }
         }
 
@@ -40,10 +35,10 @@ namespace ToDo.Client.Models
         public string Description
         {
             get => description;
-            private set
+            set
             {
-                description = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description)));
+                if (value != null && description != value)
+                    description = value;
 
             }
         }
@@ -52,10 +47,10 @@ namespace ToDo.Client.Models
         public PriorityStatus State
         {
             get => state;
-            private set
+            set
             {
-                state = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(State)));
+                if (state != value)
+                    state = value;
             }
         }
 
@@ -63,10 +58,10 @@ namespace ToDo.Client.Models
         public DateTime InsertTime
         {
             get => insertTime;
-            private set
+            set
             {
-                insertTime = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(State)));
+                if (value != null && insertTime != value)
+                    insertTime = value;
             }
         }
 
@@ -74,56 +69,33 @@ namespace ToDo.Client.Models
         public DateTime DDL
         {
             get => dDL;
-            private set
+            set
             {
-                dDL = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DDL)));
+                if (value != null && dDL != value)
+                    dDL = value;
             }
         }
 
-        private DateTime completedTime;
-        public DateTime CompletedTime
+        private DateTime? completedTime;
+        public DateTime? CompletedTime
         {
             get => completedTime;
-            private set
+            set
             {
-                completedTime = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CompletedTime)));
+                if (value != null && completedTime != value)
+                    completedTime = value;
             }
         }
 
-
-        public void Rename(string title)
+        private int kind;
+        public int Kind
         {
-            if (title != null && title != Title)
-                Title = title;
-        }
-        public void ReDescription(string description)
-        {
-            if (description != null && description != Description)
-                Description = description;
-
-        }
-        public void ReState(PriorityStatus state)
-        {
-            if (state != State)
-                State = state;
-        }
-        public void ReInsertTime(DateTime insertTime)
-        {
-            if (insertTime != null && insertTime != InsertTime)
-                InsertTime = insertTime;
-
-        }
-        public void ReDDL(DateTime dDL)
-        {
-            if (dDL != null && dDL != DDL)
-                DDL = dDL;
-        }
-        public void ReCompletedTime(DateTime completedTime)
-        {
-            if (completedTime != null && completedTime != CompletedTime)
-                CompletedTime = completedTime;
+            get => kind;
+            set
+            {
+                if (kind != value)
+                    kind = value;
+            }
         }
     }
 }

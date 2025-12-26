@@ -1,4 +1,5 @@
-﻿using ToDo.WebAPI.DTOs;
+﻿using ToDo.Client.Services;
+using ToDo.WebAPI.DTOs;
 using ToDo.WebAPI.HttpClient;
 using ToDo.WebAPI.Request;
 
@@ -7,7 +8,8 @@ namespace ToDo.Client.Login.ViewModels
     internal class LoginViewModel : BindableBase, IDialogAware
     {
         private readonly IContainerRegistry container;
-        private readonly HttpRequestClient<AccountDTO> httpClient;
+        private readonly HttpService httpService;
+        private readonly NotificationService notify;
 
         public string Title => "Login";
         public DialogCloseListener RequestClose { get; set; }
@@ -30,10 +32,11 @@ namespace ToDo.Client.Login.ViewModels
         }
         #endregion
 
-        public LoginViewModel(IContainerRegistry container, HttpRequestClient<AccountDTO> client)
+        public LoginViewModel(IContainerRegistry container, HttpService httpService, NotificationService notify)
         {
             this.container = container;
-            this.httpClient = client;
+            this.httpService = httpService;
+            this.notify = notify;
             LoginCommand = new AsyncDelegateCommand(Login);
             SignInCommand = new(SingIn);
         }
@@ -45,44 +48,22 @@ namespace ToDo.Client.Login.ViewModels
                 || string.IsNullOrEmpty(AccountDTO.Password)
                 || AccountDTO.Password != AccountDTO.ConfirmPassword)
             {
-                var message = new Wpf.Ui.Controls.MessageBox
-                {
-                    Title = "Error",
-                    Content = "Account or Password can not be empty or Password not match!"
-                };
-                _ = message.ShowDialogAsync();
+                await notify.ShowMessageAsync(TitleType.Error, "Account or Password can not be empty or Password not match!");
                 return;
             }
 
             // 创建请求，设定 路由、请求方式、DTO
-            var request = new Request<AccountDTO>
-            {
-                Route = "/Users/Register",
-                Method = RestSharp.Method.POST,
-                Params = accountDTO
-            };
+            var response = await httpService.PostRequestAsync("/Users/Register", accountDTO);
 
-            // 发起请求
-            var response = await httpClient.ExecuteAsync(request);
             // 注册失败
             if (response.Code != 1)
             {
-                var signInError = new Wpf.Ui.Controls.MessageBox
-                {
-                    Title = "Error",
-                    Content = response.Message ?? "Sign in error!"
-                };
-                _ = signInError.ShowDialogAsync();
+                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Sign in error!");
                 return;
             }
 
             // 注册成功
-            var signInScs = new Wpf.Ui.Controls.MessageBox
-            {
-                Title = "Notification",
-                Content = response.Message
-            };
-            _ = signInScs.ShowDialogAsync();
+            await notify.ShowMessageAsync(TitleType.Notification, response.Message);
         }
 
         private async Task Login()
@@ -93,33 +74,17 @@ namespace ToDo.Client.Login.ViewModels
             // 基本验证
             if (string.IsNullOrEmpty(AccountDTO.Account) || string.IsNullOrEmpty(AccountDTO.Password))
             {
-                var message = new Wpf.Ui.Controls.MessageBox
-                {
-                    Title = "Error",
-                    Content = "Account or Password can not be empty or Password not matched!"
-                };
-                _ = message.ShowDialogAsync();
+                await notify.ShowMessageAsync(TitleType.Error, "Account or Password can not be empty or Password not matched!");
                 return;
             }
 
             // 创建请求，设定 路由、请求方式、DTO
-            var request = new Request<AccountDTO>
-            {
-                Route = $"/Users/Login?account={accountDTO.Account}&password={accountDTO.Password}",
-                Method = RestSharp.Method.GET,
-            };
+            var response = await httpService.GetRequestAsync<AccountDTO>($"/Users/Login?account={accountDTO.Account}&password={accountDTO.Password}");
 
-            // 发起请求
-            var response = await httpClient.ExecuteAsync(request);
             // 登录失败
             if (response.Code != 1)
             {
-                var signInError = new Wpf.Ui.Controls.MessageBox
-                {
-                    Title = "Error",
-                    Content = response.Message ?? "Login in error!"
-                };
-                _ = signInError.ShowDialogAsync();
+                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Login in error!");
                 return;
             }
 
@@ -136,8 +101,5 @@ namespace ToDo.Client.Login.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
         }
-
-
-
     }
 }

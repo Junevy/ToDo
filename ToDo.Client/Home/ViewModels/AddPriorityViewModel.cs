@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using ToDo.Client.Models;
+﻿using ToDo.Client.Models;
 using ToDo.WebAPI.DTOs;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
@@ -10,52 +9,60 @@ namespace ToDo.Client.Home.ViewModels
     {
         // Dialog window title
         public string Title { get; set; } = string.Empty;
-
-        public PriorityDTO PriorityDTO { get; set; }
         public DialogCloseListener RequestClose { get; set; }
 
         // Pop window object
         private readonly ISnackbarService snackbarService;
+        public PriorityDTO PriorityDTO { get; set; }
 
         #region DTO Properties
         private string dtoTitle = string.Empty;
         public string DtoTitle
         {
             get => dtoTitle;
-            set => SetProperty(ref dtoTitle, value);
+            set
+            { SetProperty(ref dtoTitle, value); PriorityDTO.Title = value; }
         }
 
         private string description = string.Empty;
         public string Description
         {
             get => description;
-            set => SetProperty(ref description, value);
+            set { SetProperty(ref description, value); PriorityDTO.Description = value; }
         }
 
         private int state = -100;
         public int State
         {
             get => state;
-            set => SetProperty(ref state, value);
+            set { SetProperty(ref state, value); PriorityDTO.State = value; }
         }
 
         private DateTime dDL = DateTime.Now.AddDays(1);
         public DateTime DDL
         {
             get => dDL;
-            set => SetProperty(ref dDL, value);
+            set { SetProperty(ref dDL, value); PriorityDTO.DDL = value; }
         }
         #endregion
 
         public DelegateCommand AddPriorityCommand { get; set; }
         public DelegateCommand<string> SelectLevelCommand { get; set; }
 
+        public AddPriorityViewModel(ISnackbarService snackbarService)
+        {
+            AddPriorityCommand = new(AddPriority);
+            SelectLevelCommand = new(SelectLevel);
+            PriorityDTO = new();
+            this.snackbarService = snackbarService;
+        }
+
         public bool CanCloseDialog() => true;
 
         public void OnDialogClosed()
         {
         }
-        
+
         /// <summary>
         /// Fill the params when parameters is not null
         /// </summary>
@@ -73,14 +80,6 @@ namespace ToDo.Client.Home.ViewModels
                 State = (int)param.State;
                 DDL = param.DDL;
             }
-        }
-
-        public AddPriorityViewModel(ISnackbarService snackbarService)
-        {
-            AddPriorityCommand = new(AddPriority);
-            SelectLevelCommand = new(SelectLevel);
-            PriorityDTO = new();
-            this.snackbarService = snackbarService;
         }
 
         /// <summary>

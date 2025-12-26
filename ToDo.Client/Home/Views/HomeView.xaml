@@ -24,6 +24,12 @@
         <!--<viewmodels:PriorityCommandArgs x:Key="PriorityCommandArgs"/>-->
     </UserControl.Resources>
 
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding RefreshCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Border
         Margin="2,10,0,0"
         HorizontalAlignment="Stretch"
@@ -118,7 +124,7 @@
                                         Appearance="Secondary"
                                         FontSize="20"
                                         Foreground="{DynamicResource DarkTextFill}"
-                                        Text="{Binding Priorities.Count}"
+                                        Text="{Binding SummaryCount}"
                                         TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </Grid>
@@ -227,7 +233,7 @@
                                         Appearance="Secondary"
                                         FontSize="20"
                                         Foreground="{DynamicResource DarkTextFill}"
-                                        Text="10%"
+                                        Text="{Binding Percentage}"
                                         TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </Grid>
@@ -281,7 +287,7 @@
                                         Appearance="Secondary"
                                         FontSize="20"
                                         Foreground="{DynamicResource DarkTextFill}"
-                                        Text="2"
+                                        Text="{Binding MemosCount}"
                                         TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </Grid>
@@ -397,7 +403,7 @@
                                                                 FontSize="12"
                                                                 FontTypography="Subtitle"
                                                                 Foreground="Gray"
-                                                                Text="{Binding DDL, StringFormat={}{0:'ExceptDate': yyyy-MM-dd}}"
+                                                                Text="{Binding DDL, StringFormat={}{0:'DDL': yyyy-MM-dd}}"
                                                                 TextWrapping="WrapWithOverflow" />
                                                         </StackPanel>
 
@@ -418,7 +424,7 @@
                                                         <ContextMenu FontFamily="Consolas" FontWeight="Bold">
                                                             <MenuItem
                                                                 x:Name="Normal"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                                 Header="{lang:Resx Normal}">
                                                                 <MenuItem.CommandParameter>
@@ -431,7 +437,7 @@
 
                                                             <MenuItem
                                                                 x:Name="Completed"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource CompletedText}"
                                                                 Header="{lang:Resx Completed}">
                                                                 <MenuItem.CommandParameter>
@@ -444,7 +450,7 @@
 
                                                             <MenuItem
                                                                 x:Name="Priority"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource EmergencyText}"
                                                                 Header="{lang:Resx PriorityThings}">
                                                                 <MenuItem.CommandParameter>
@@ -457,7 +463,7 @@
 
                                                             <MenuItem
                                                                 x:Name="RemindTomorrow"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource RemindTomorrowText}"
                                                                 Header="{lang:Resx RemindTomorrow}">
                                                                 <MenuItem.CommandParameter>
@@ -470,7 +476,7 @@
 
                                                             <MenuItem
                                                                 x:Name="Discard"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource Discard}"
                                                                 Header="{lang:Resx Discard}">
                                                                 <MenuItem.CommandParameter>
@@ -573,7 +579,7 @@
                                                         <ContextMenu FontFamily="Consolas" FontWeight="Bold">
                                                             <MenuItem
                                                                 x:Name="Normal"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                                 Header="{lang:Resx Normal}">
                                                                 <MenuItem.CommandParameter>
@@ -586,7 +592,7 @@
 
                                                             <MenuItem
                                                                 x:Name="Completed"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource CompletedText}"
                                                                 Header="{lang:Resx Completed}">
                                                                 <MenuItem.CommandParameter>
@@ -599,7 +605,7 @@
 
                                                             <MenuItem
                                                                 x:Name="Priority"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource EmergencyText}"
                                                                 Header="{lang:Resx PriorityThings}">
                                                                 <MenuItem.CommandParameter>
@@ -612,7 +618,7 @@
 
                                                             <MenuItem
                                                                 x:Name="RemindTomorrow"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource RemindTomorrowText}"
                                                                 Header="{lang:Resx RemindTomorrow}">
                                                                 <MenuItem.CommandParameter>
@@ -625,7 +631,7 @@
 
                                                             <MenuItem
                                                                 x:Name="Discard"
-                                                                Command="{Binding DataContext.ChangeCommand, Source={x:Reference HomeUserControl}}"
+                                                                Command="{Binding DataContext.ChangeStatusCommand, Source={x:Reference HomeUserControl}}"
                                                                 Foreground="{DynamicResource Discard}"
                                                                 Header="{lang:Resx Discard}">
                                                                 <MenuItem.CommandParameter>
