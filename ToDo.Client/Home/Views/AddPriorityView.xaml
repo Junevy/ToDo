@@ -51,7 +51,7 @@
 
             <ui:TextBox
                 Width="300"
-                Height="30"
+                Height="35"
                 Margin="10"
                 HorizontalAlignment="Center"
                 PlaceholderText="{lang:Resx PriorityTip}"

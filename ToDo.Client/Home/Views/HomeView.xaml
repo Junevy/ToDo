@@ -309,7 +309,7 @@
                     <!--  待办事项  -->
                     <Grid
                         Grid.Column="0"
-                        Margin="10,0,10,0"
+                        Margin="10,20,10,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
 
@@ -500,7 +500,7 @@
                     <!--  备忘录  -->
                     <Grid
                         Grid.Column="1"
-                        Margin="10,0,20,0"
+                        Margin="10,25,20,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
 

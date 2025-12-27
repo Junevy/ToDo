@@ -3,6 +3,8 @@ using System.Windows;
 using ToDo.Client.Home.ViewModels;
 using ToDo.Client.Home.Views;
 using ToDo.Client.Login.Views;
+using ToDo.Client.Overview.ViewModels;
+using ToDo.Client.Overview.Views;
 using ToDo.Client.Services;
 using ToDo.Client.Settings.ViewModels;
 using ToDo.Client.Settings.Views;
@@ -30,6 +32,7 @@ namespace ToDo.Client
             containerRegistry.RegisterDialog<LoginView>();
             containerRegistry.RegisterForNavigation<HomeView, HomeViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
+            containerRegistry.RegisterForNavigation<OverviewView, OverviewViewModel>();
             containerRegistry.RegisterDialog<AddPriorityView, AddPriorityViewModel>();
 
             //containerRegistry.RegisterSingleton<SettingsViewModel>();

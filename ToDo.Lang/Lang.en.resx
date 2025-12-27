@@ -225,4 +225,37 @@
   <data name="Percent" xml:space="preserve">
     <value>Percent</value>
   </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchBox" xml:space="preserve">
+    <value>Input that you want to search...</value>
+  </data>
+  <data name="dg_title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="dg_insertTime" xml:space="preserve">
+    <value>Insert Time</value>
+  </data>
+  <data name="dg_completedTime" xml:space="preserve">
+    <value>Completed Time</value>
+  </data>
+  <data name="dg_description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="CompletedPrioritySentence" xml:space="preserve">
+    <value>All the following priorities have been completed</value>
+  </data>
+  <data name="dg_state" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="dg_kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="dg_filtered" xml:space="preserve">
+    <value>Filtered items...</value>
+  </data>
 </root>

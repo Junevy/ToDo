@@ -151,6 +151,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 All the following priorities have been completed 的本地化字符串。
+        /// </summary>
+        public static string CompletedPrioritySentence {
+            get {
+                return ResourceManager.GetString("CompletedPrioritySentence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Confirm Password 的本地化字符串。
         /// </summary>
         public static string ConfirmPassword {
@@ -174,6 +183,69 @@ namespace ToDo.Lang {
         public static string DescriptionTip {
             get {
                 return ResourceManager.GetString("DescriptionTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Completed Time 的本地化字符串。
+        /// </summary>
+        public static string dg_completedTime {
+            get {
+                return ResourceManager.GetString("dg_completedTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Description 的本地化字符串。
+        /// </summary>
+        public static string dg_description {
+            get {
+                return ResourceManager.GetString("dg_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Filtered items... 的本地化字符串。
+        /// </summary>
+        public static string dg_filtered {
+            get {
+                return ResourceManager.GetString("dg_filtered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Insert Time 的本地化字符串。
+        /// </summary>
+        public static string dg_insertTime {
+            get {
+                return ResourceManager.GetString("dg_insertTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Kind 的本地化字符串。
+        /// </summary>
+        public static string dg_kind {
+            get {
+                return ResourceManager.GetString("dg_kind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Status 的本地化字符串。
+        /// </summary>
+        public static string dg_state {
+            get {
+                return ResourceManager.GetString("dg_state", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Title 的本地化字符串。
+        /// </summary>
+        public static string dg_title {
+            get {
+                return ResourceManager.GetString("dg_title", resourceCulture);
             }
         }
         
@@ -268,6 +340,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 Overview 的本地化字符串。
+        /// </summary>
+        public static string Overview {
+            get {
+                return ResourceManager.GetString("Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Password 的本地化字符串。
         /// </summary>
         public static string Password {
@@ -327,6 +408,24 @@ namespace ToDo.Lang {
         public static string RemindTomorrow {
             get {
                 return ResourceManager.GetString("RemindTomorrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Input that you want to search... 的本地化字符串。
+        /// </summary>
+        public static string SearchBox {
+            get {
+                return ResourceManager.GetString("SearchBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Search 的本地化字符串。
+        /// </summary>
+        public static string SearchButton {
+            get {
+                return ResourceManager.GetString("SearchButton", resourceCulture);
             }
         }
         

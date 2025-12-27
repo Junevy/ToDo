@@ -260,4 +260,48 @@
     <value>Percent</value>
     <comment>HomeViewModel</comment>
   </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Overview</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>Search</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="SearchBox" xml:space="preserve">
+    <value>Input that you want to search...</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="dg_title" xml:space="preserve">
+    <value>Title</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="dg_insertTime" xml:space="preserve">
+    <value>Insert Time</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="dg_completedTime" xml:space="preserve">
+    <value>Completed Time</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="dg_description" xml:space="preserve">
+    <value>Description</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="CompletedPrioritySentence" xml:space="preserve">
+    <value>All the following priorities have been completed</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="dg_state" xml:space="preserve">
+    <value>Status</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="dg_kind" xml:space="preserve">
+    <value>Kind</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="dg_filtered" xml:space="preserve">
+    <value>Filtered items...</value>
+    <comment>Overview</comment>
+  </data>
 </root>

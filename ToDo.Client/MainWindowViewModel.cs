@@ -16,6 +16,7 @@ namespace ToDo.Client
         public DelegateCommand ToSettingsCommand { get; set; }
 
         public DelegateCommand ToHomeCommand { get; set; }
+        public DelegateCommand ToOverviewCommand { get; set; }
 
         public MainWindowViewModel(IRegionManager regionManager)
         {
@@ -23,12 +24,19 @@ namespace ToDo.Client
 
             ToSettingsCommand = new(ToSettings);
             ToHomeCommand = new(ToHome);
+            ToOverviewCommand = new(ToOverview);
 
             MenuItems.Add(AddItem(
                 "Home",
                 new SymbolIcon { Symbol = SymbolRegular.Home24 },
                 typeof(HomeView),
                 ToHomeCommand));
+
+            MenuItems.Add(AddItem(
+                "Over",
+                new SymbolIcon { Symbol = SymbolRegular.ContentViewGallery24 },
+                typeof(HomeView),
+                ToOverviewCommand));
 
             FooterMenuItems.Add(AddItem(
                 "SET",
@@ -55,6 +63,8 @@ namespace ToDo.Client
                 ToHomeCommand));
         }
 
+        private void ToOverview()
+            => regionmanager.RequestNavigate("ContentRegion", "OverviewView");
         private void ToSettings()
             => regionmanager.RequestNavigate("ContentRegion", "SettingsView");
         private void ToHome()

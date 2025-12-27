@@ -225,4 +225,37 @@
   <data name="Percent" xml:space="preserve">
     <value>百分比</value>
   </data>
+  <data name="Overview" xml:space="preserve">
+    <value>概览</value>
+  </data>
+  <data name="SearchButton" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="SearchBox" xml:space="preserve">
+    <value>Input that you want to search...</value>
+  </data>
+  <data name="dg_title" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="dg_insertTime" xml:space="preserve">
+    <value>插入时间</value>
+  </data>
+  <data name="dg_completedTime" xml:space="preserve">
+    <value>完成时间</value>
+  </data>
+  <data name="dg_description" xml:space="preserve">
+    <value>事项描述</value>
+  </data>
+  <data name="CompletedPrioritySentence" xml:space="preserve">
+    <value>以下待办事项均已完成。</value>
+  </data>
+  <data name="dg_state" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="dg_kind" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="dg_filtered" xml:space="preserve">
+    <value>经过过滤的项目...</value>
+  </data>
 </root>

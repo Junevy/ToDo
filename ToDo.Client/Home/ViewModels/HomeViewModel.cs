@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
 using ToDo.Client.Models;
 using ToDo.Client.Services;
 using ToDo.WebAPI.DTOs;
@@ -22,12 +21,6 @@ namespace ToDo.Client.Home.ViewModels
         public ObservableCollection<PriorityModel> Memos { get; private set; } = [];
 
         public MainInfoModel InfoModel { get; private set; }
-
-        //public int CompletedCount { get; private set; }
-        //public int SummaryCount { get; private set; }
-        //public string Percentage => (CompletedCount * 100.0 / Math.Max(SummaryCount, 1)).ToString("f2") + "%";
-        //public int MemosCount { get; private set; }
-
 
         //public DelegateCommand ShowSnackbarCommand { get; set; }
         public AsyncDelegateCommand<object[]?> ChangeStatusCommand { get; set; }
