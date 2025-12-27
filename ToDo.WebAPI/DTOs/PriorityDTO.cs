@@ -1,7 +1,10 @@
-﻿namespace ToDo.WebAPI.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ToDo.WebAPI.DTOs
 {
     public class PriorityDTO
     {
+        public int No { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int State { get; set; } = -100;

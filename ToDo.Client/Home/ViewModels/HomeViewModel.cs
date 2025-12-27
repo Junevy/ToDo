@@ -1,12 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Media;
 using ToDo.Client.Models;
 using ToDo.Client.Services;
 using ToDo.WebAPI.DTOs;
-using ToDo.WebAPI.HttpClient;
-using ToDo.WebAPI.Request;
-using ToDo.WebAPI.Response;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
@@ -27,14 +23,14 @@ namespace ToDo.Client.Home.ViewModels
 
         public MainInfoModel InfoModel { get; private set; }
 
-        public int CompletedCount => Priorities.Where(t => t.State == 0).Count();
-        public int SummaryCount => Priorities.Count() + Memos.Count();
-        public string Percentage => (CompletedCount * 100 / (SummaryCount == 0 ? 1 : SummaryCount)).ToString("f2") + "%";
-        public int MemosCount => Memos.Count();
+        //public int CompletedCount { get; private set; }
+        //public int SummaryCount { get; private set; }
+        //public string Percentage => (CompletedCount * 100.0 / Math.Max(SummaryCount, 1)).ToString("f2") + "%";
+        //public int MemosCount { get; private set; }
 
 
         //public DelegateCommand ShowSnackbarCommand { get; set; }
-        public DelegateCommand<object[]?> ChangeStatusCommand { get; set; }
+        public AsyncDelegateCommand<object[]?> ChangeStatusCommand { get; set; }
         public DelegateCommand ShowAddPriorityCommand { get; set; }
         public AsyncDelegateCommand RefreshCommand { get; set; }
         public DelegateCommand<Guid?> EditPriorityCommand { get; set; }
@@ -48,6 +44,8 @@ namespace ToDo.Client.Home.ViewModels
             this.dialogService = dialogService;
             this.httpService = httpService;
             this.notify = notify;
+
+            InfoModel = new();
 
             //ShowSnackbarCommand = new(ShowSnackBar);
             EditPriorityCommand = new(EditPriority);
@@ -64,10 +62,15 @@ namespace ToDo.Client.Home.ViewModels
         /// Change the status of priorities
         /// </summary>
         /// <param name="obj">The level of selected item</param>
-        private void ChangePriorityStatus(object[]? obj)
+        private async Task ChangePriorityStatus(object[]? obj)
         {
-            var level = ((string)obj[0]) ?? "RemindTomorrow";
-            var model = (PriorityModel)obj[1];
+            if (obj is not object[] { Length: >= 2 } array ||
+                array[0] is not string level ||
+                array[1] is not PriorityModel model)
+                return;
+
+            //level = ((string)obj[0]) ?? "RemindTomorrow";
+            //model = (PriorityModel)obj[1];
 
             var state = level switch
             {
@@ -80,44 +83,34 @@ namespace ToDo.Client.Home.ViewModels
             };
 
             model.State = state;
-            if (model.State == PriorityStatus.Completed)
+            var dto = model.ToDTO();
+
+            if (dto != null)
             {
-                Priorities.Remove(model);
+                await httpService.PutRequestAsync<PriorityDTO>("/Priority/Update", dto);
             }
-
-
-            var test  = Priorities.OrderBy(t => t.State).ToList();
-            Priorities.Clear();
-            Priorities.AddRange(test);
-
-            
-            OnMainInfoUpdated();
+            await RefreshPriorityAsync();
         }
 
         /// <summary>
         /// The callback of add priority
         /// </summary>
         /// <param name="result">Priority params</param>
-        private void AddPriorityResultCallback(IDialogResult result)
+        private async void AddPriorityResultCallback(IDialogResult result)
         {
-            var dto = result.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
-
-            _ = AddPriority(dto).ContinueWith(t =>
+            try
             {
-                if (t.Exception != null)
-                {
-                    Application.Current.Dispatcher.BeginInvoke(async () =>
-                    {
-                        await notify.ShowMessageAsync(TitleType.Error, t.Exception.InnerException?.Message ?? "Sign in error!");
-                        return;
-                    });
-                }
+                var dto = result.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
+                if (dto == null)
+                    return;
 
-                Application.Current.Dispatcher.BeginInvoke(async () =>
-                {
-                    await RefreshPriorityAsync();
-                });
-            }, TaskScheduler.Default);
+                await AddPriority(dto);
+                await RefreshPriorityAsync();
+            }
+            catch (Exception ex)
+            {
+                await notify.ShowMessageAsync(TitleType.Error, ex.Message ?? "Add priority error!");
+            }
         }
 
         /// <summary>
@@ -125,30 +118,20 @@ namespace ToDo.Client.Home.ViewModels
         /// </summary>
         private async Task RefreshPriorityAsync()
         {
-            var response = await httpService.GetRequestAsync<MainInfoDTO>("/Priority/Get");
-
-            if (response.Code != 1)
+            try
             {
-                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Refresh Failed!");
-                return;
+                var response = await httpService.GetRequestAsync<MainInfoDTO>("/Priority/Get");
+
+                if (response.Code != 1)
+                {
+                    await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Refresh Failed!");
+                    return;
+                }
+
+                UpdatePriorities(response.Data.Priorities);
+                OnMainInfoUpdated(response.Data.Priorities);
             }
-
-            UpdatePriorities(response.Data.Priorities);
-            OnMainInfoUpdated();
-
-        }
-
-        /// <summary>
-        /// 当数据刷新后，更新UI
-        /// </summary>
-        /// <param name="dto"></param>
-        private void OnMainInfoUpdated()
-        {
-
-            RaisePropertyChanged(nameof(CompletedCount));
-            RaisePropertyChanged(nameof(SummaryCount));
-            RaisePropertyChanged(nameof(Percentage));
-            RaisePropertyChanged(nameof(MemosCount));
+            catch (Exception e) { Console.WriteLine(e.Message); }
         }
 
         /// <summary>
@@ -167,16 +150,36 @@ namespace ToDo.Client.Home.ViewModels
                     Memos.Add(p.ToModel());
                     continue;
                 }
-                Priorities.Add(p.ToModel());
+
+                if (p.State != 0)
+                    Priorities.Add(p.ToModel());
             }
+        }
+
+        /// <summary>
+        /// 当数据刷新后，更新UI
+        /// </summary>
+        /// <param name="dto"></param>
+        private void OnMainInfoUpdated(IEnumerable<PriorityDTO> priorities)
+        {
+            InfoModel.CompletedCount = priorities.Where(t => t.State == 0)?.Count() ?? 0;
+            InfoModel.SummaryCount = priorities?.Count() ?? 0;
+            InfoModel.MemosCount = Memos.Count();
         }
 
         /// <summary>
         /// Change priority and update priority to database.
         /// </summary>
-        private void UpdatePriority(IDialogResult result)
+        private async void UpdatePriority(IDialogResult result)
         {
-            var request = new Request<PriorityDTO>();
+
+            var dto = result.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
+            if (dto != null)
+            {
+                await httpService.PutRequestAsync<PriorityDTO>("/Priority/Update", dto);
+            }
+
+            await RefreshPriorityAsync();
         }
 
         /// <summary>
@@ -189,12 +192,9 @@ namespace ToDo.Client.Home.ViewModels
             var response = await httpService.PostRequestAsync<PriorityDTO>("/Priority/Add", dto);
 
             if (response.Code != 1)
-            {
                 await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Add Failed!");
-                return;
-            }
 
-            await notify.ShowMessageAsync("Notification", response.Message ?? "Add Successful!");
+            //await notify.ShowMessageAsync("Notification", response.Message ?? "Add Successful!");
         }
 
         /// <summary>

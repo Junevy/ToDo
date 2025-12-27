@@ -20,6 +20,9 @@
             CompletedTime = completedTime;
         }
 
+        private int no;
+        public int No { get { return no; } set => no = value; }
+
         private string title;
         public string Title
         {

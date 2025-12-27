@@ -21,7 +21,7 @@
             get
             {
                 if (SummaryCount == 0) return "100%";
-                return (CompletedCount * 100 / SummaryCount).ToString("f2") + "%";
+                return (CompletedCount * 100.0 / Math.Max(SummaryCount, 1)).ToString("f2") + "%";
             }
         }
 

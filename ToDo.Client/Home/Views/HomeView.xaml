@@ -124,7 +124,7 @@
                                         Appearance="Secondary"
                                         FontSize="20"
                                         Foreground="{DynamicResource DarkTextFill}"
-                                        Text="{Binding SummaryCount}"
+                                        Text="{Binding InfoModel.SummaryCount}"
                                         TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </Grid>
@@ -179,7 +179,7 @@
                                         Appearance="Secondary"
                                         FontSize="20"
                                         Foreground="{DynamicResource DarkTextFill}"
-                                        Text="{Binding CompletedCount}"
+                                        Text="{Binding InfoModel.CompletedCount}"
                                         TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </Grid>
@@ -233,7 +233,7 @@
                                         Appearance="Secondary"
                                         FontSize="20"
                                         Foreground="{DynamicResource DarkTextFill}"
-                                        Text="{Binding Percentage}"
+                                        Text="{Binding InfoModel.Percentage}"
                                         TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </Grid>
@@ -287,7 +287,7 @@
                                         Appearance="Secondary"
                                         FontSize="20"
                                         Foreground="{DynamicResource DarkTextFill}"
-                                        Text="{Binding MemosCount}"
+                                        Text="{Binding InfoModel.MemosCount}"
                                         TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </Grid>

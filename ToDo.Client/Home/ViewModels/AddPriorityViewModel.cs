@@ -61,6 +61,7 @@ namespace ToDo.Client.Home.ViewModels
 
         public void OnDialogClosed()
         {
+            
         }
 
         /// <summary>
@@ -75,6 +76,7 @@ namespace ToDo.Client.Home.ViewModels
             if (parameters.Count > 0)
             {
                 var param = parameters.GetValue<PriorityModel>("param");
+                PriorityDTO.No = param.No;
                 DtoTitle = param.Title;
                 Description = param.Description;
                 State = (int)param.State;

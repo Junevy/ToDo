@@ -9,6 +9,7 @@ namespace ToDo.Client.Services
         {
             return new PriorityModel
             {
+                No = dto.No,
                 Title = dto.Title,
                 State = (PriorityStatus)dto.State,
                 Description = dto.Description,
@@ -16,6 +17,21 @@ namespace ToDo.Client.Services
                 DDL = dto.DDL,
                 CompletedTime = dto.CompletedTime,
                 Kind = dto.Kind
+            };
+        }
+
+        public static PriorityDTO ToDTO(this PriorityModel model)
+        {
+            return new PriorityDTO
+            {
+                No = model.No,
+                Title = model.Title,
+                State = (int)model.State,
+                Description = model.Description,
+                InsertTime = model.InsertTime,
+                DDL = model.DDL,
+                CompletedTime = model.CompletedTime,
+                Kind = model.Kind
             };
         }
     }

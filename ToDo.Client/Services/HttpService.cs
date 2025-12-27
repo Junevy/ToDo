@@ -1,5 +1,4 @@
-﻿using ToDo.WebAPI.DTOs;
-using ToDo.WebAPI.HttpClient;
+﻿using ToDo.WebAPI.HttpClient;
 using ToDo.WebAPI.Request;
 using ToDo.WebAPI.Response;
 
@@ -35,6 +34,20 @@ namespace ToDo.Client.Services
             var response = await httpClient.ExecuteAsync<T>(request);
 
             return response;
+        }
+
+        public async Task<Response<T>> PutRequestAsync<T>(string route, T dto)
+        {
+            var request = new Request<T>
+            {
+                Route = route,
+                Method = RestSharp.Method.PUT,
+                Params = dto
+            };
+
+            return await httpClient.ExecuteAsync<T>(request);
+
+            //return response;
         }
     }
 }
