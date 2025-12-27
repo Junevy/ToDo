@@ -24,15 +24,11 @@
         BorderThickness="1"
         CornerRadius="10,0,0,10">
 
-        <Grid
-            Margin="20,10,20,0"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
+        <Grid Margin="20,10,20,0">
             <Grid.RowDefinitions>
                 <RowDefinition MaxHeight="50" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-
 
             <!--  title  -->
             <ui:TextBlock
@@ -42,212 +38,266 @@
                 FontTypography="Title"
                 Text="{lang:Resx Overview}" />
 
+            <ui:DynamicScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden">
 
-            <!--  content  -->
-            <DockPanel
-                Grid.Row="1"
-                Margin="0,10,0,0"
-                HorizontalAlignment="Stretch">
+                <!--  content  -->
+                <DockPanel
+                    Grid.Row="1"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Stretch">
 
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                    <ui:TextBox
-                        Width="250"
-                        Height="35"
-                        Margin="0,10,10,10"
-                        HorizontalAlignment="Center"
-                        PlaceholderText="Input some that you want to search..."
-                        Text="" />
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <ui:TextBox
+                            Width="250"
+                            Height="35"
+                            Margin="0,10,10,10"
+                            HorizontalAlignment="Center"
+                            PlaceholderText="Input some that you want to search..."
+                            Text="" />
 
-                    <ui:Button
-                        Width="100"
-                        Height="35"
-                        Content="{lang:Resx SearchButton}"
-                        Icon="{ui:SymbolIcon Search12}" />
-                </StackPanel>
+                        <DatePicker
+                            MinWidth="200"
+                            Margin="5,0,10,0"
+                            SelectedDate="{Binding CreateTime, StringFormat={}{0:d}}"
+                            Text="{lang:Resx StartDate}" />
 
-                <StackPanel DockPanel.Dock="Top">
-                    <!--  search card and datagrid  -->
-                    <ui:CardExpander
-                        Padding="10"
-                        Icon="{ui:SymbolIcon Search12}"
-                        IsExpanded="True">
-                        <ui:CardExpander.Header>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                        <ui:TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Appearance="Secondary"
+                            FontTypography="Body"
+                            Text="——" />
 
-                                <ui:TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    Margin="0,5,0,0"
-                                    Appearance="Tertiary"
-                                    FontSize="16"
-                                    Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"
-                                    Text="{lang:Resx dg_filtered}" />
-                            </Grid>
-                        </ui:CardExpander.Header>
+                        <DatePicker
+                            MinWidth="200"
+                            Margin="15,0,0,0"
+                            SelectedDate="{Binding CreateTime, StringFormat={}{0:d}}"
+                            Text="{lang:Resx EndDate}" />
 
-                        <ui:DataGrid
-                            x:Name="SearchData"
-                            AutoGenerateColumns="False"
-                            ItemsSource="{Binding TestList}">
-                            <DataGrid.Columns>
-                                <!--  no  -->
-                                <DataGridTextColumn
-                                    Width="50"
-                                    Binding="{Binding No}"
-                                    Header="ID"
-                                    IsReadOnly="True" />
+                        <ui:Button
+                            Width="100"
+                            Height="35"
+                            Margin="20,0,0,0"
+                            Content="{lang:Resx SearchButton}"
+                            Icon="{ui:SymbolIcon Search12}" />
 
-                                <!--  kind  -->
-                                <DataGridTextColumn
-                                    Width="80"
-                                    Binding="{Binding Kind}"
-                                    Header="{lang:Resx dg_kind}" />
+                    </StackPanel>
 
-                                <!--  title  -->
-                                <DataGridTextColumn
-                                    Width="200"
-                                    Binding="{Binding Title}"
-                                    Header="{lang:Resx dg_title}"
-                                    IsReadOnly="False" />
+                    <StackPanel DockPanel.Dock="Top">
+                        <!--  search card and datagrid  -->
+                        <ui:CardExpander
+                            MaxHeight="300"
+                            Padding="10"
+                            Icon="{ui:SymbolIcon Search12}"
+                            IsExpanded="True">
 
-                                <!--  state  -->
-                                <DataGridTemplateColumn Header="{lang:Resx dg_state}" MinWidth="120">
-                                    <!--  显示状态  -->
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding State}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
+                            <ui:CardExpander.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
 
-                                    <!--  编辑状态  -->
-                                    <DataGridTemplateColumn.CellEditingTemplate>
-                                        <DataTemplate>
-                                            <ComboBox ItemsSource="{Binding DataContext.PriorityStatusList, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding State, Mode=TwoWay}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellEditingTemplate>
-                                </DataGridTemplateColumn>
+                                    <ui:TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="0,5,0,0"
+                                        Appearance="Tertiary"
+                                        FontSize="16"
+                                        Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"
+                                        Text="{lang:Resx dg_filtered}" />
+                                </Grid>
+                            </ui:CardExpander.Header>
 
+                            <ui:DataGrid
+                                x:Name="SearchData"
+                                MaxHeight="300"
+                                AutoGenerateColumns="False"
+                                FrozenColumnCount="1"
+                                ItemsSource="{Binding CompletedList}">
 
-                                <!--  insert time  -->
-                                <DataGridTemplateColumn Width="180" Header="{lang:Resx dg_insertTime}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding InsertTime}" Margin="10,0,0,0" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="RowEditEnding">
+                                        <i:InvokeCommandAction Command="{Binding UpdatePriorityCommand}" CommandParameter="{Binding ElementName=SearchData, Path=SelectedItem}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
 
-                                <!--  completed time  -->
-                                <DataGridTemplateColumn Width="180" Header="{lang:Resx dg_completedTime}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding CompletedTime}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <DataGrid.Columns>
+                                    <!--  no  -->
+                                    <DataGridTextColumn
+                                        Width="60"
+                                        Binding="{Binding No}"
+                                        Header="ID"
+                                        IsReadOnly="True" />
 
-                                <!--  description  -->
-                                <DataGridTextColumn
-                                    Width="auto"
-                                    Binding="{Binding Description}"
-                                    Header="{lang:Resx dg_description}" />
-                            </DataGrid.Columns>
-                        </ui:DataGrid>
-                    </ui:CardExpander>
-                </StackPanel>
+                                    <!--  kind  -->
+                                    <DataGridTextColumn
+                                        Width="80"
+                                        Binding="{Binding Kind}"
+                                        Header="{lang:Resx dg_kind}" />
 
-                <StackPanel
-                    Margin="0,30,0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    DockPanel.Dock="Top"
-                    Orientation="Vertical">
+                                    <!--  title  -->
+                                    <DataGridTextColumn
+                                        Width="200"
+                                        Binding="{Binding Title}"
+                                        Header="{lang:Resx dg_title}"
+                                        IsReadOnly="False" />
 
-                    <ui:TextBlock
-                        Margin="0,0,0,10"
-                        FontTypography="Subtitle"
-                        Text="{lang:Resx Completed}" />
+                                    <!--  state  -->
+                                    <DataGridTemplateColumn MinWidth="120" Header="{lang:Resx dg_state}">
+                                        <!--  显示状态  -->
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="10,0,0,0" Text="{Binding State}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
 
-                    <ui:CardExpander
-                        Padding="10"
-                        Icon="{ui:SymbolIcon TableSimpleCheckmark32}"
-                        IsExpanded="True">
-                        <ui:CardExpander.Header>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <ui:TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    Margin="0,5,0,0"
-                                    Appearance="Tertiary"
-                                    FontSize="16"
-                                    Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"
-                                    Text="{lang:Resx CompletedPrioritySentence}" />
-                            </Grid>
-                        </ui:CardExpander.Header>
+                                        <!--  编辑状态  -->
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding DataContext.PriorityStatusList, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding State, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
 
 
-                        <ui:DataGrid
-                            AutoGenerateColumns="False"
-                            IsReadOnly="True"
-                            ItemsSource="{Binding TestList}">
-                            <DataGrid.Columns>
-                                <!--  no  -->
-                                <DataGridTextColumn
-                                    Width="50"
-                                    Binding="{Binding No}"
-                                    Header="ID" />
+                                    <!--  insert time  -->
+                                    <DataGridTemplateColumn Width="180" Header="{lang:Resx dg_insertTime}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="10,0,0,0" Text="{Binding InsertTime}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                                <!--  title  -->
-                                <DataGridTextColumn
-                                    Width="200"
-                                    Binding="{Binding Title}"
-                                    Header="{lang:Resx dg_title}" />
+                                    <!--  completed time  -->
+                                    <DataGridTemplateColumn Width="180" Header="{lang:Resx dg_completedTime}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="10,0,0,0" Text="{Binding CompletedTime}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                                <!--  completed time  -->
-                                <DataGridTemplateColumn Width="250" Header="{lang:Resx dg_insertTime}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding InsertTime}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                    <!--  description  -->
+                                    <DataGridTextColumn
+                                        Width="auto"
+                                        Binding="{Binding Description}"
+                                        Header="{lang:Resx dg_description}" />
+                                </DataGrid.Columns>
+                            </ui:DataGrid>
+                        </ui:CardExpander>
+                    </StackPanel>
 
-                                <!--  completed time  -->
-                                <DataGridTemplateColumn Width="250" Header="{lang:Resx dg_completedTime}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding CompletedTime}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                    <Grid Margin="0,30,0,0" VerticalAlignment="Top">
 
-                                <!--  description  -->
-                                <DataGridTextColumn
-                                    Width="auto"
-                                    Binding="{Binding Description}"
-                                    Header="{lang:Resx dg_description}" />
-                            </DataGrid.Columns>
-                        </ui:DataGrid>
-                    </ui:CardExpander>
-                </StackPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-            </DockPanel>
+                        <ui:TextBlock
+                            Grid.Row="0"
+                            Margin="0,0,0,10"
+                            FontTypography="Subtitle"
+                            Text="{lang:Resx Completed}" />
+
+                        <ui:CardExpander
+                            Grid.Row="1"
+                            MaxHeight="300"
+                            Padding="10"
+                            Icon="{ui:SymbolIcon TableSimpleCheckmark32}"
+                            IsExpanded="False">
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Expanded">
+                                    <i:InvokeCommandAction Command="{Binding LoadCompletedPriorityCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                            <ui:CardExpander.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ui:TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Margin="0,5,0,0"
+                                        Appearance="Tertiary"
+                                        FontSize="16"
+                                        Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"
+                                        Text="{lang:Resx CompletedPrioritySentence}" />
+                                </Grid>
+                            </ui:CardExpander.Header>
+
+
+                            <ui:DataGrid
+                                MaxHeight="300"
+                                AutoGenerateColumns="False"
+                                FrozenColumnCount="1"
+                                HorizontalScrollBarVisibility="Auto"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding CompletedList}"
+                                VerticalScrollBarVisibility="Auto">
+                                <DataGrid.Columns>
+                                    <!--  no  -->
+                                    <DataGridTextColumn
+                                        Width="60"
+                                        Binding="{Binding No}"
+                                        Header="ID" />
+
+                                    <!--  title  -->
+                                    <DataGridTextColumn
+                                        Width="200"
+                                        Binding="{Binding Title}"
+                                        Header="{lang:Resx dg_title}" />
+
+                                    <!--  InsertTime  -->
+                                    <DataGridTemplateColumn Width="250" Header="{lang:Resx dg_insertTime}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="10,0,0,0" Text="{Binding InsertTime}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--  completed time  -->
+                                    <DataGridTemplateColumn Width="250" Header="{lang:Resx dg_completedTime}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="10,0,0,0" Text="{Binding CompletedTime}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--  description  -->
+                                    <DataGridTextColumn
+                                        Width="auto"
+                                        Binding="{Binding Description}"
+                                        Header="{lang:Resx dg_description}" />
+                                </DataGrid.Columns>
+                            </ui:DataGrid>
+
+                        </ui:CardExpander>
+
+
+                    </Grid>
+
+                </DockPanel>
+            </ui:DynamicScrollViewer>
             <!--<ui:SnackbarPresenter x:Name="SnackbarPresenter" Grid.Row="1" />-->
         </Grid>
+
+
+
     </Border>
 </UserControl>

@@ -304,4 +304,12 @@
     <value>Filtered items...</value>
     <comment>Overview</comment>
   </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+    <comment>Overview</comment>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+    <comment>Overview</comment>
+  </data>
 </root>

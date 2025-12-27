@@ -258,4 +258,10 @@
   <data name="dg_filtered" xml:space="preserve">
     <value>Filtered items...</value>
   </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
 </root>

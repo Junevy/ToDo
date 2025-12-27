@@ -258,4 +258,10 @@
   <data name="dg_filtered" xml:space="preserve">
     <value>经过过滤的项目...</value>
   </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>开始的时间</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>结束的时间</value>
+  </data>
 </root>

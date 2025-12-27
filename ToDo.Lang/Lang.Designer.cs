@@ -268,6 +268,15 @@ namespace ToDo.Lang {
         }
         
         /// <summary>
+        ///   查找类似 End Date 的本地化字符串。
+        /// </summary>
+        public static string EndDate {
+            get {
+                return ResourceManager.GetString("EndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 English 的本地化字符串。
         /// </summary>
         public static string English {
@@ -453,6 +462,15 @@ namespace ToDo.Lang {
         public static string SignIn {
             get {
                 return ResourceManager.GetString("SignIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Start Date 的本地化字符串。
+        /// </summary>
+        public static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
             }
         }
         
