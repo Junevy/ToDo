@@ -10,7 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:viewmodels="clr-namespace:ToDo.Client.Overview.ViewModels"
-    x:Name="HomeUserControl"
+    x:Name="OverviewUserControl"
     d:DataContext="{d:DesignInstance Type=viewmodels:OverviewViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -49,7 +49,7 @@
                 Margin="0,10,0,0"
                 HorizontalAlignment="Stretch">
 
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" >
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                     <ui:TextBox
                         Width="250"
                         Height="35"
@@ -66,7 +66,7 @@
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Top">
-                    <!--search card and datagrid-->
+                    <!--  search card and datagrid  -->
                     <ui:CardExpander
                         Padding="10"
                         Icon="{ui:SymbolIcon Search12}"
@@ -93,14 +93,16 @@
                         </ui:CardExpander.Header>
 
                         <ui:DataGrid
+                            x:Name="SearchData"
                             AutoGenerateColumns="False"
                             ItemsSource="{Binding TestList}">
                             <DataGrid.Columns>
                                 <!--  no  -->
-                                <DataGridTextColumn IsReadOnly="True"
+                                <DataGridTextColumn
                                     Width="50"
                                     Binding="{Binding No}"
-                                    Header="ID" />
+                                    Header="ID"
+                                    IsReadOnly="True" />
 
                                 <!--  kind  -->
                                 <DataGridTextColumn
@@ -112,20 +114,32 @@
                                 <DataGridTextColumn
                                     Width="200"
                                     Binding="{Binding Title}"
-                                    Header="{lang:Resx dg_title}" />
+                                    Header="{lang:Resx dg_title}"
+                                    IsReadOnly="False" />
 
                                 <!--  state  -->
-                                <DataGridTextColumn
-                                    Width="80"
-                                    Binding="{Binding State}"
-                                    Header="{lang:Resx dg_state}" />
+                                <DataGridTemplateColumn Header="{lang:Resx dg_state}" MinWidth="120">
+                                    <!--  显示状态  -->
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding State}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                    <!--  编辑状态  -->
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding DataContext.PriorityStatusList, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding State, Mode=TwoWay}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
 
 
                                 <!--  insert time  -->
                                 <DataGridTemplateColumn Width="180" Header="{lang:Resx dg_insertTime}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding InsertTime}" />
+                                            <TextBlock Text="{Binding InsertTime}" Margin="10,0,0,0" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -150,10 +164,10 @@
                 </StackPanel>
 
                 <StackPanel
-                    DockPanel.Dock="Top"
                     Margin="0,30,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
+                    DockPanel.Dock="Top"
                     Orientation="Vertical">
 
                     <ui:TextBlock

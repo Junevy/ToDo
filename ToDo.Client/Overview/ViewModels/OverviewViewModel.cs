@@ -6,17 +6,28 @@ namespace ToDo.Client.Overview.ViewModels
 {
     public class OverviewViewModel
     {
-        public ObservableCollection<PriorityDTO> TestList { get; set; } = [];
+        public ObservableCollection<PriorityModel> TestList { get; set; } = [];
+        public IEnumerable<PriorityStatus> PriorityStatusList { get; set; } = [];
+            
 
         public OverviewViewModel()
         {
-            //TestList.Add("hello");
-            //TestList.Add("hello");
-            //TestList.Add("hello");
-            //TestList.Add("hello");
-            //TestList.Add("hello");
-            //TestList.Add("hello");
-            //TestList.Add("hello");
+            PriorityStatusList = Enum.GetValues(typeof(PriorityStatus)).Cast<PriorityStatus>();
+
+            TestList.Add(new PriorityModel()
+            {
+                No = 1,
+                Title = "test",
+                Description = "test",
+                InsertTime = DateTime.Now,
+                CompletedTime = DateTime.Now,
+                State = PriorityStatus.Completed,
+                Kind = 0
+            });
+
         }
+
+
+       
     }
 }
