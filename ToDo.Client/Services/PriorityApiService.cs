@@ -1,7 +1,5 @@
-﻿using ToDo.Client.Models;
-using ToDo.WebAPI.DTOs;
+﻿using ToDo.WebAPI.DTOs;
 using ToDo.WebAPI.Request.DTOs;
-using ToDo.WebAPI.Services;
 using ToDo.WebAPI.Services.Interface;
 
 namespace ToDo.Client.Services
@@ -10,6 +8,7 @@ namespace ToDo.Client.Services
     {
         private readonly IApi apiService = apiService;
 
+        private readonly string createRoute = "/Priority/Query";
         private readonly string queryRoute = "/Priority/Query";
         private readonly string updateRoute = "/Priority/Update";
         private readonly string queryCompletedRoute = "/Priority/QueryCompleted";
@@ -22,14 +21,16 @@ namespace ToDo.Client.Services
             return response.Data;
         }
 
-
-        public async Task<string> Update(PriorityDTO dto)
+        public async Task<bool> Update(PriorityDTO dto)
         {
             var response = await apiService.PutRequestAsync<PriorityDTO, string>(updateRoute, dto);
-            return response.Data;
+            return response.IsSuccess;
         }
 
-
-
+        public async Task<bool> Create(PriorityDTO dto)
+        {
+            var response = await apiService.PostRequestAsync<PriorityDTO, string>(createRoute, dto);
+            return response.IsSuccess;
+        }
     }
 }

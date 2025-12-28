@@ -44,7 +44,7 @@ namespace ToDo.Client.Home.ViewModels
 
             //ShowSnackbarCommand = new(ShowSnackBar);
             EditPriorityCommand = new(EditPriority);
-            ChangeStatusCommand = new(ChangePriorityStatus);
+            ChangeStatusCommand = new(UpdatePriorityStatus);
             RefreshCommand = new(RefreshPriorityAsync);
 
             ShowAddPriorityCommand = new(() =>
@@ -57,7 +57,7 @@ namespace ToDo.Client.Home.ViewModels
         /// Change the status of priorities
         /// </summary>
         /// <param name="obj">The level of selected item</param>
-        private async Task ChangePriorityStatus(object[]? obj)
+        private async Task UpdatePriorityStatusAsync(object[]? obj)
         {
             if (obj is not object[] { Length: >= 2 } array ||
                 array[0] is not string level ||
@@ -77,60 +77,30 @@ namespace ToDo.Client.Home.ViewModels
             model.State = state;
             var dto = model.ToDTO();
 
+            await UpdatePriorityAsync(dto);
+        }
+
+        private async Task UpdatePriorityAsync(PriorityDTO dto)
+        {
             if (dto != null)
             {
-                await httpService.PutRequestAsync<PriorityDTO>("/Priority/Update", dto);
-            }
-            await RefreshPriorityAsync();
-        }
+                var result = await apiService.Update(dto);
 
-        /// <summary>
-        /// The callback of add priority
-        /// </summary>
-        /// <param name="result">Priority params</param>
-        private async void AddPriorityResultCallback(IDialogResult result)
-        {
-            try
-            {
-                var dto = result.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
-                if (dto == null)
-                    return;
-
-                await AddPriority(dto);
-                await RefreshPriorityAsync();
-            }
-            catch (Exception ex)
-            {
-                await notify.ShowAsync(TitleType.Error, ex.Message ?? "Add priority error!");
-            }
-        }
-
-        /// <summary>
-        /// Re-fresh priorities from database when add or update and delete priorities after.
-        /// </summary>
-        private async Task RefreshPriorityAsync()
-        {
-            try
-            {
-                var response = await httpService.GetRequestAsync<HomeInfoResponseDTO>("/Priority/Get");
-
-                if (response.Code != 1)
+                if (!result)
                 {
-                    await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Refresh Failed!");
-                    return;
+                    await QueryPrioritiesAsync();
+                    await notify.ShowAsync(TitleType.Error, "Update status failed!");
                 }
-
-                UpdatePriorities(response.Data.Priorities);
-                OnMainInfoUpdated(response.Data.Priorities);
             }
-            catch (Exception e) { Console.WriteLine(e.Message); }
         }
+
+
 
         /// <summary>
         /// 分类Memos和Priorities
         /// </summary>
         /// <param name="priorities">Memos和Priorities的集合（可枚举对象）</param>
-        private void UpdatePriorities(IEnumerable<PriorityDTO> priorities)
+        private void UpdateUIPriorities(IEnumerable<PriorityDTO> priorities)
         {
             Priorities.Clear();
             Memos.Clear();
@@ -148,6 +118,108 @@ namespace ToDo.Client.Home.ViewModels
             }
         }
 
+
+
+        /// <summary>
+        /// Command of the Double click priority. Edit the priority
+        /// </summary>
+        /// <param name="id"></param>
+        private void UpdatePriorityDialog(Guid? id)
+        {
+            var e = Priorities.FirstOrDefault(e => e.Id == id);
+
+            DialogParameters param = new()
+            {
+                { "param", e }
+            };
+            dialogService.ShowDialog("AddPriorityView", param, UpdatePriorityCallBackAsync);
+        }
+
+        /// <summary>
+        /// Update priority to database When closed the UpdatePriorityDialog dialog
+        /// </summary>
+        /// <param name="param">Edited priority param</param>
+        private void UpdatePriorityCallBackAsync(IDialogResult param)
+        {
+            var dto = param.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
+            if (dto != null)
+            {
+                _ = UpdatePriorityAsync(dto);
+            }
+        }
+
+
+        /// <summary>
+        /// Add Priority to database via WebAPI
+        /// </summary>
+        /// <param name="dto">DTO Model</param>
+        /// <returns>The result of add</returns>
+        private async Task CreatePriorityAsync(PriorityDTO dto)
+        {
+            var result = await apiService.Create(dto);
+
+            if (!result)
+                await notify.ShowAsync(TitleType.Error, "Create Failed!");
+        }
+
+        /// <summary>
+        /// The callback of add priority
+        /// </summary>
+        /// <param name="result">Priority params</param>
+        private async void CreatePriorityResultCallbackAsync(IDialogResult result)
+        {
+            try
+            {
+                var dto = result.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
+                if (dto == null)
+                    return;
+
+                await AddPriority(dto);
+                await RefreshPriorityAsync();
+            }
+            catch (Exception ex)
+            {
+                await notify.ShowAsync(TitleType.Error, ex.Message ?? "Add priority error!");
+            }
+        }
+
+
+
+
+
+        /// <summary>
+        /// Re-fresh priorities from database when add or update and delete priorities after.
+        /// </summary>
+        private async Task QueryPrioritiesAsync()
+        {
+            try
+            {
+                var response = await httpService.GetRequestAsync<HomeInfoResponseDTO>("/Priority/Get");
+
+                if (response.Code != 1)
+                {
+                    await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Refresh Failed!");
+                    return;
+                }
+
+                UpdatePriorities(response.Data.Priorities);
+                OnMainInfoUpdated(response.Data.Priorities);
+            }
+            catch (Exception e) { Console.WriteLine(e.Message); }
+        }
+
+
+
+
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
+        /// 可以使用ObservableCollection吗
         /// <summary>
         /// 当数据刷新后，更新UI
         /// </summary>
@@ -157,52 +229,6 @@ namespace ToDo.Client.Home.ViewModels
             InfoModel.CompletedCount = priorities.Where(t => t.State == 0)?.Count() ?? 0;
             InfoModel.SummaryCount = priorities?.Count() ?? 0;
             InfoModel.MemosCount = Memos.Count();
-        }
-
-        /// <summary>
-        /// Change priority and update priority to database.
-        /// </summary>
-        private async void UpdatePriority(IDialogResult result)
-        {
-
-            var dto = result.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
-            if (dto != null)
-            {
-                await httpService.PutRequestAsync<PriorityDTO>("/Priority/Update", dto);
-            }
-
-            await RefreshPriorityAsync();
-        }
-
-        /// <summary>
-        /// Add Priority to database via WebAPI
-        /// </summary>
-        /// <param name="dto">DTO Model</param>
-        /// <returns>The result of add</returns>
-        private async Task AddPriority(PriorityDTO dto)
-        {
-            var response = await httpService.PostRequestAsync<PriorityDTO>("/Priority/Add", dto);
-
-            if (response.Code != 1)
-                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Add Failed!");
-
-            //await notify.ShowMessageAsync("Notification", response.Message ?? "Add Successful!");
-        }
-
-        /// <summary>
-        /// Command of the Double click priority. Edit the priority
-        /// </summary>
-        /// <param name="id"></param>
-        private void EditPriority(Guid? id)
-        {
-
-            var e = Priorities.FirstOrDefault(e => e.Id == id);
-
-            DialogParameters param = new()
-            {
-                { "param", e }
-            };
-            dialogService.ShowDialog("AddPriorityView", param, UpdatePriority);
         }
 
         /// <summary>
