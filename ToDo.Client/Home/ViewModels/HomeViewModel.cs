@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using ToDo.Client.Extensions;
 using ToDo.Client.Models;
 using ToDo.Client.Services;
 using ToDo.WebAPI.DTOs;
+using ToDo.WebAPI.Response.DTOs;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
@@ -11,7 +13,7 @@ namespace ToDo.Client.Home.ViewModels
     {
         private readonly IDialogService dialogService;
         private readonly NotificationService notify;
-        private readonly HttpService httpService;
+        private readonly PriorityApiService apiService;
 
         // Pop window object
         private readonly ISnackbarService snackbarService;
@@ -20,7 +22,7 @@ namespace ToDo.Client.Home.ViewModels
         public ObservableCollection<PriorityModel> Priorities { get; private set; } = [];
         public ObservableCollection<PriorityModel> Memos { get; private set; } = [];
 
-        public MainInfoModel InfoModel { get; private set; }
+        public HomeInfoModel InfoModel { get; private set; }
 
         //public DelegateCommand ShowSnackbarCommand { get; set; }
         public AsyncDelegateCommand<object[]?> ChangeStatusCommand { get; set; }
@@ -30,12 +32,12 @@ namespace ToDo.Client.Home.ViewModels
 
         public HomeViewModel(ISnackbarService snackbarService,
             IDialogService dialogService,
-            HttpService httpService,
+            PriorityApiService apiService,
             NotificationService notify)
         {
             this.snackbarService = snackbarService;
             this.dialogService = dialogService;
-            this.httpService = httpService;
+            this.apiService = apiService;
             this.notify = notify;
 
             InfoModel = new();
@@ -61,9 +63,6 @@ namespace ToDo.Client.Home.ViewModels
                 array[0] is not string level ||
                 array[1] is not PriorityModel model)
                 return;
-
-            //level = ((string)obj[0]) ?? "RemindTomorrow";
-            //model = (PriorityModel)obj[1];
 
             var state = level switch
             {
@@ -102,7 +101,7 @@ namespace ToDo.Client.Home.ViewModels
             }
             catch (Exception ex)
             {
-                await notify.ShowMessageAsync(TitleType.Error, ex.Message ?? "Add priority error!");
+                await notify.ShowAsync(TitleType.Error, ex.Message ?? "Add priority error!");
             }
         }
 
@@ -113,7 +112,7 @@ namespace ToDo.Client.Home.ViewModels
         {
             try
             {
-                var response = await httpService.GetRequestAsync<MainInfoDTO>("/Priority/Get");
+                var response = await httpService.GetRequestAsync<HomeInfoResponseDTO>("/Priority/Get");
 
                 if (response.Code != 1)
                 {

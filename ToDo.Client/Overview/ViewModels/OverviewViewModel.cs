@@ -1,53 +1,73 @@
-﻿using DryIoc.ImTools;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using ToDo.Client.Extensions;
 using ToDo.Client.Models;
 using ToDo.Client.Services;
 using ToDo.WebAPI.DTOs;
+using ToDo.WebAPI.Request.DTOs;
 
 namespace ToDo.Client.Overview.ViewModels
 {
     public class OverviewViewModel
     {
-        private readonly HttpService httpService;
+        private readonly PriorityApiService apiService;
 
         public ObservableCollection<PriorityModel> CompletedList { get; set; } = [];
+        public ObservableCollection<PriorityModel> QueriedList { get; set; } = [];
         public IEnumerable<PriorityStatus> PriorityStatusList => Enum.GetValues(typeof(PriorityStatus)).Cast<PriorityStatus>();
 
-        public AsyncDelegateCommand LoadCompletedPriorityCommand { get; set; }
-        public AsyncDelegateCommand<object> UpdatePriorityCommand { get; set; }
-        public OverviewViewModel(HttpService httpService)
-        {
-            this.httpService = httpService;
+        public QueryByConditionRequestDTO QueryDTO { get; set; }
+        public QueryByConditionRequestDTO QueryCompletedDTO { get; set; }
 
-            LoadCompletedPriorityCommand = new(LoadCompletedPriorityAsync);
+        public AsyncDelegateCommand QueryCompletedPriorityCommand { get; set; }
+        public AsyncDelegateCommand<object> UpdatePriorityCommand { get; set; }
+        public AsyncDelegateCommand QueryByConditionCommand { get; set; }
+        public OverviewViewModel(PriorityApiService apiService)
+        {
+            this.apiService = apiService;
+            QueryDTO = new();
+            QueryCompletedDTO = new()
+            {
+                Status = 0
+            };
+
+            QueryCompletedPriorityCommand = new(QueryCompletedPriorityAsync);
             UpdatePriorityCommand = new(UpdatePriorityAsync);
+            QueryByConditionCommand = new(QueryByConditionAsync);
+        }
+
+        private async Task QueryByConditionAsync()
+        {
+            var list = await apiService.QueryByCondition(QueryDTO);
+
+            if (list != null && list.Count > 0)
+                AddDtoToList(list, QueriedList);
         }
 
         private async Task UpdatePriorityAsync(object model)
         {
-            
+            if (model is PriorityModel e)
+            {
+                await apiService.Update(e.ToDTO());
+            }
         }
 
-        private async Task LoadCompletedPriorityAsync()
+        private async Task QueryCompletedPriorityAsync()
         {
-            var response = await httpService.GetRequestAsync<MainInfoDTO>("/Priority/GetCompleted");
+            var list = await apiService.QueryByCondition(QueryCompletedDTO);
 
-            if (response != null)
-                AddPriorityToList(response.Data.Priorities);
+            if (list != null && list.Count > 0)
+                AddDtoToList(list, CompletedList);
         }
 
-        public void AddPriorityToList(IEnumerable<PriorityDTO> priorities)
+        public void AddDtoToList(IEnumerable<PriorityDTO> priorities, ObservableCollection<PriorityModel> obsList)
         {
-            CompletedList.Clear();
+            obsList.Clear();
 
             foreach (var p in priorities)
             {
                 if (p.State == 0)
-                    CompletedList.Add(p.ToModel());
+                    obsList.Add(p.ToModel());
             }
-
         }
     }
 }

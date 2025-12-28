@@ -8,7 +8,9 @@ using ToDo.Client.Overview.Views;
 using ToDo.Client.Services;
 using ToDo.Client.Settings.ViewModels;
 using ToDo.Client.Settings.Views;
-using ToDo.WebAPI.HttpClient;
+using ToDo.WebAPI.Client;
+using ToDo.WebAPI.Services;
+using ToDo.WebAPI.Services.Interface;
 using Wpf.Ui;
 using DialogWindow = ToDo.Client.Login.Views.DialogWindow;
 
@@ -26,36 +28,32 @@ namespace ToDo.Client
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // ===================================
-            // Views 
+            // Views and ViewModels
             // ===================================
             containerRegistry.RegisterDialogWindow<DialogWindow>();
             containerRegistry.RegisterDialog<LoginView>();
+            containerRegistry.RegisterDialog<AddPriorityView, AddPriorityViewModel>();
+
             containerRegistry.RegisterForNavigation<HomeView, HomeViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
             containerRegistry.RegisterForNavigation<OverviewView, OverviewViewModel>();
-            containerRegistry.RegisterDialog<AddPriorityView, AddPriorityViewModel>();
-
-            //containerRegistry.RegisterSingleton<SettingsViewModel>();
-            //containerRegistry.RegisterSingleton<HomeViewModel>();
 
             // ===================================
-            // Localization service 
+            // Service 
             // ===================================
             containerRegistry.RegisterSingleton<ILocalizationService, LocalizationService>();
+            containerRegistry.RegisterSingleton<ISnackbarService, SnackbarService>();
+            containerRegistry.RegisterSingleton<IApi, HttpService>();
+            containerRegistry.RegisterSingleton<PriorityApiService>();
+            containerRegistry.RegisterSingleton<RequestClient>(_ => new RequestClient("http://localhost:6338/api"));
 
             // ===================================
             // Tools
             // ===================================
-            containerRegistry.RegisterSingleton<HttpRequestClient>(
-                _ => new HttpRequestClient("http://localhost:6338/api"));
-
-            containerRegistry.RegisterSingleton<HttpService>();
-
             //containerRegistry.GetContainer().Register<HttpRequestClient<AccountDTO>>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
             //containerRegistry.GetContainer().Register<HttpRequestClient<PriorityDTO>>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
             //containerRegistry.GetContainer().Register<HttpRequestClient<MainInfoDTO>>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
 
-            containerRegistry.RegisterSingleton<ISnackbarService, SnackbarService>();
         }
 
         protected override void OnInitialized()

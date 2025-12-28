@@ -1,6 +1,8 @@
-﻿namespace ToDo.WebAPI.DTOs
+﻿using ToDo.WebAPI.DTOs;
+
+namespace ToDo.WebAPI.Response.DTOs
 {
-    public class MainInfoDTO
+    public class HomeInfoResponseDTO
     {
         public int SummaryCount { get; set; }
 

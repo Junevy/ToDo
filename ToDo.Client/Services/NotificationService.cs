@@ -2,7 +2,7 @@
 {
     public class NotificationService
     {
-        public async Task ShowMessageAsync(string title, string message)
+        public async Task ShowAsync(string title, string message)
         {
             var box = new Wpf.Ui.Controls.MessageBox
             {
@@ -12,7 +12,7 @@
             await box.ShowDialogAsync();
         }
 
-        public async Task ShowMessageAsync(TitleType title, string message)
+        public async Task ShowAsync(TitleType title, string message)
         {
             var t = title switch
             {

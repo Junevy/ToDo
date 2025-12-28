@@ -1,16 +1,17 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
+using ToDo.WebAPI.Client.Interface;
 using ToDo.WebAPI.Request;
 using ToDo.WebAPI.Response;
 
-namespace ToDo.WebAPI.HttpClient
+namespace ToDo.WebAPI.Client
 {
-    public class HttpRequestClient(string routeHead)
+    public class RequestClient(string routeHead) : IRequestClient
     {
         private readonly RestClient client = new();
         private readonly string routeHead = routeHead;
 
-        public async Task<Response<T>> ExecuteAsync<T>(Request<T> request)
+        public async Task<Response<TResponse>> ExecuteAsync<TRequest, TResponse>(Request<TRequest> request)
         {
             var re = new RestRequest(request.Method);
 
@@ -31,11 +32,11 @@ namespace ToDo.WebAPI.HttpClient
 
             if (res.StatusCode == System.Net.HttpStatusCode.OK)
                 // Deserialize params of response to object
-                return JsonConvert.DeserializeObject<Response<T>>(res.Content)
-                    ?? new Response<T>() { Code = -1, Message = "Server error", Data = default };
+                return JsonConvert.DeserializeObject<Response<TResponse>>(res.Content)
+                    ?? new Response<TResponse>() { Code = -1, Message = "Server error", Data = default };
 
             // return default result
-            return new Response<T>() { Code = -1, Message = "Server error", Data = default };
+            return new Response<TResponse>() { Code = -1, Message = "Server error", Data = default };
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ToDo.Client.Models
 {
-    public class MainInfoModel : BindableBase
+    public class HomeInfoModel : BindableBase
     {
         private int summaryCount;
         public int SummaryCount

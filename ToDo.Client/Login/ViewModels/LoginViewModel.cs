@@ -1,7 +1,7 @@
 ﻿using ToDo.Client.Services;
-using ToDo.WebAPI.DTOs;
 using ToDo.WebAPI.HttpClient;
 using ToDo.WebAPI.Request;
+using ToDo.WebAPI.Request.DTOs;
 
 namespace ToDo.Client.Login.ViewModels
 {
@@ -20,8 +20,8 @@ namespace ToDo.Client.Login.ViewModels
         #endregion
 
         #region Properties
-        private AccountDTO accountDTO = new();
-        public AccountDTO AccountDTO
+        private AccountRequestDTO accountDTO = new();
+        public AccountRequestDTO AccountDTO
         {
             get => accountDTO;
             set
@@ -48,7 +48,7 @@ namespace ToDo.Client.Login.ViewModels
                 || string.IsNullOrEmpty(AccountDTO.Password)
                 || AccountDTO.Password != AccountDTO.ConfirmPassword)
             {
-                await notify.ShowMessageAsync(TitleType.Error, "Account or Password can not be empty or Password not match!");
+                await notify.ShowAsync(TitleType.Error, "Account or Password can not be empty or Password not match!");
                 return;
             }
 
@@ -74,12 +74,12 @@ namespace ToDo.Client.Login.ViewModels
             // 基本验证
             if (string.IsNullOrEmpty(AccountDTO.Account) || string.IsNullOrEmpty(AccountDTO.Password))
             {
-                await notify.ShowMessageAsync(TitleType.Error, "Account or Password can not be empty or Password not matched!");
+                await notify.ShowAsync(TitleType.Error, "Account or Password can not be empty or Password not matched!");
                 return;
             }
 
             // 创建请求，设定 路由、请求方式、DTO
-            var response = await httpService.GetRequestAsync<AccountDTO>($"/Users/Login?account={accountDTO.Account}&password={accountDTO.Password}");
+            var response = await httpService.GetRequestAsync<AccountRequestDTO>($"/Users/Login?account={accountDTO.Account}&password={accountDTO.Password}");
 
             // 登录失败
             if (response.Code != 1)

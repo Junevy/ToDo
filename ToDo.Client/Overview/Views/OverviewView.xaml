@@ -40,12 +40,12 @@
 
             <ui:DynamicScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden">
 
-                <!--  content  -->
                 <DockPanel
                     Grid.Row="1"
                     Margin="0,10,0,0"
                     HorizontalAlignment="Stretch">
 
+                    <!--  query control  -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                         <ui:TextBox
                             Width="250"
@@ -53,12 +53,12 @@
                             Margin="0,10,10,10"
                             HorizontalAlignment="Center"
                             PlaceholderText="Input some that you want to search..."
-                            Text="" />
+                            Text="{Binding QueryDTO.PriorityTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DatePicker
                             MinWidth="200"
                             Margin="5,0,10,0"
-                            SelectedDate="{Binding CreateTime, StringFormat={}{0:d}}"
+                            SelectedDate="{Binding QueryDTO.StartDate, StringFormat={}{0:d}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{lang:Resx StartDate}" />
 
                         <ui:TextBlock
@@ -71,18 +71,20 @@
                         <DatePicker
                             MinWidth="200"
                             Margin="15,0,0,0"
-                            SelectedDate="{Binding CreateTime, StringFormat={}{0:d}}"
+                            SelectedDate="{Binding QueryDTO.EndDate, StringFormat={}{0:d}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{lang:Resx EndDate}" />
 
                         <ui:Button
                             Width="100"
                             Height="35"
                             Margin="20,0,0,0"
+                            Command="{Binding QueryByConditionCommand}"
                             Content="{lang:Resx SearchButton}"
                             Icon="{ui:SymbolIcon Search12}" />
 
                     </StackPanel>
 
+                    <!--  query control  -->
                     <StackPanel DockPanel.Dock="Top">
                         <!--  search card and datagrid  -->
                         <ui:CardExpander
@@ -117,7 +119,7 @@
                                 MaxHeight="300"
                                 AutoGenerateColumns="False"
                                 FrozenColumnCount="1"
-                                ItemsSource="{Binding CompletedList}">
+                                ItemsSource="{Binding QueriedList}">
 
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="RowEditEnding">
@@ -151,14 +153,14 @@
                                         <!--  显示状态  -->
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Margin="10,0,0,0" Text="{Binding State}" />
+                                                <TextBlock Margin="10,0,0,0" Text="{Binding State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
 
                                         <!--  编辑状态  -->
                                         <DataGridTemplateColumn.CellEditingTemplate>
                                             <DataTemplate>
-                                                <ComboBox ItemsSource="{Binding DataContext.PriorityStatusList, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding State, Mode=TwoWay}" />
+                                                <ComboBox ItemsSource="{Binding DataContext.PriorityStatusList, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellEditingTemplate>
                                     </DataGridTemplateColumn>
@@ -192,6 +194,8 @@
                         </ui:CardExpander>
                     </StackPanel>
 
+                    
+                    <!--completed control-->
                     <Grid Margin="0,30,0,0" VerticalAlignment="Top">
 
                         <Grid.RowDefinitions>
@@ -214,7 +218,7 @@
 
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Expanded">
-                                    <i:InvokeCommandAction Command="{Binding LoadCompletedPriorityCommand}" />
+                                    <i:InvokeCommandAction Command="{Binding QueryCompletedPriorityCommand}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
 
@@ -288,16 +292,10 @@
                             </ui:DataGrid>
 
                         </ui:CardExpander>
-
-
                     </Grid>
-
                 </DockPanel>
             </ui:DynamicScrollViewer>
             <!--<ui:SnackbarPresenter x:Name="SnackbarPresenter" Grid.Row="1" />-->
         </Grid>
-
-
-
     </Border>
 </UserControl>
