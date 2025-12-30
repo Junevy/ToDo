@@ -9,11 +9,12 @@ namespace ToDo.Client.Overview.ViewModels
 {
     public class OverviewViewModel
     {
-        private readonly PriorityApiService apiService;
+        private readonly PriorityService apiService;
 
         public ObservableCollection<PriorityModel> CompletedList { get; set; } = [];
         public ObservableCollection<PriorityModel> QueriedList { get; set; } = [];
         public IEnumerable<PriorityStatus> PriorityStatusList => Enum.GetValues(typeof(PriorityStatus)).Cast<PriorityStatus>();
+        public PriorityStatus SelectedStatus { get; set; }
 
         public QueryByConditionRequestDTO QueryDTO { get; set; }
         public QueryByConditionRequestDTO QueryCompletedDTO { get; set; }
@@ -21,7 +22,7 @@ namespace ToDo.Client.Overview.ViewModels
         public AsyncDelegateCommand QueryCompletedPriorityCommand { get; set; }
         public AsyncDelegateCommand<object> UpdatePriorityCommand { get; set; }
         public AsyncDelegateCommand QueryByConditionCommand { get; set; }
-        public OverviewViewModel(PriorityApiService apiService)
+        public OverviewViewModel(PriorityService apiService)
         {
             this.apiService = apiService;
             QueryDTO = new();
@@ -37,7 +38,8 @@ namespace ToDo.Client.Overview.ViewModels
 
         private async Task QueryByConditionAsync()
         {
-            var list = await apiService.QueryByCondition(QueryDTO);
+            var list = await apiService.QueryByConditionAsync(QueryDTO);
+            QueriedList.Clear();
 
             if (list != null && list.Count > 0)
                 AddDtoToList(list, QueriedList);
@@ -47,13 +49,13 @@ namespace ToDo.Client.Overview.ViewModels
         {
             if (model is PriorityModel e)
             {
-                await apiService.Update(e.ToDTO());
+                await apiService.UpdateAsync(e.ToDTO());
             }
         }
 
         private async Task QueryCompletedPriorityAsync()
         {
-            var list = await apiService.QueryByCondition(QueryCompletedDTO);
+            var list = await apiService.QueryByConditionAsync(QueryCompletedDTO);
 
             if (list != null && list.Count > 0)
                 AddDtoToList(list, CompletedList);
@@ -61,12 +63,9 @@ namespace ToDo.Client.Overview.ViewModels
 
         public void AddDtoToList(IEnumerable<PriorityDTO> priorities, ObservableCollection<PriorityModel> obsList)
         {
-            obsList.Clear();
-
             foreach (var p in priorities)
             {
-                if (p.State == 0)
-                    obsList.Add(p.ToModel());
+                obsList.Add(p.ToModel());
             }
         }
     }

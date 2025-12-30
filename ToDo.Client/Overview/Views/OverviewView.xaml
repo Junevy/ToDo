@@ -17,6 +17,10 @@
     FontFamily="Arial"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <cvt:StatusToNumConvter x:Key="StatusToNumConvter"/>
+    </UserControl.Resources>
+
     <Border
         Margin="2,10,0,0"
         HorizontalAlignment="Stretch"
@@ -73,6 +77,12 @@
                             Margin="15,0,0,0"
                             SelectedDate="{Binding QueryDTO.EndDate, StringFormat={}{0:d}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{lang:Resx EndDate}" />
+
+                        <ComboBox IsEditable="True"
+                            MinWidth="120"
+                            Margin="15,0,0,0"
+                            ItemsSource="{Binding PriorityStatusList}"
+                            SelectedItem="{Binding QueryDTO.Status, Mode=TwoWay, Converter={StaticResource StatusToNumConvter}}" />
 
                         <ui:Button
                             Width="100"
@@ -194,8 +204,8 @@
                         </ui:CardExpander>
                     </StackPanel>
 
-                    
-                    <!--completed control-->
+
+                    <!--  completed control  -->
                     <Grid Margin="0,30,0,0" VerticalAlignment="Top">
 
                         <Grid.RowDefinitions>
@@ -213,8 +223,7 @@
                             Grid.Row="1"
                             MaxHeight="300"
                             Padding="10"
-                            Icon="{ui:SymbolIcon TableSimpleCheckmark32}"
-                            IsExpanded="False">
+                            Icon="{ui:SymbolIcon TableSimpleCheckmark32}">
 
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Expanded">

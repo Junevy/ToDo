@@ -8,7 +8,7 @@
 
         public DateTime? EndDate { get; set; }
 
-        public int? Status { get; set; }
+        public int Status { get; set; }
 
     }
 }

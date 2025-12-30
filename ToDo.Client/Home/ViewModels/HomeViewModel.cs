@@ -13,8 +13,7 @@ namespace ToDo.Client.Home.ViewModels
     {
         private readonly IDialogService dialogService;
         private readonly NotificationService notify;
-        private readonly PriorityApiService apiService;
-        //private bool isFirstLoaded = false;
+        private readonly PriorityService priorityService;
 
         // Pop window object
         private readonly ISnackbarService snackbarService;
@@ -33,12 +32,12 @@ namespace ToDo.Client.Home.ViewModels
 
         public HomeViewModel(ISnackbarService snackbarService,
             IDialogService dialogService,
-            PriorityApiService apiService,
+            PriorityService priorityService,
             NotificationService notify)
         {
             this.snackbarService = snackbarService;
             this.dialogService = dialogService;
-            this.apiService = apiService;
+            this.priorityService = priorityService;
             this.notify = notify;
 
             InfoModel = new();
@@ -78,9 +77,9 @@ namespace ToDo.Client.Home.ViewModels
             };
 
             var snapStatus = model.State;
-            model.State = state;
             var dto = model.ToDTO();
-            var result = await UpdatePriorityAsync(dto);
+            dto.State = (int)state;
+            var result = await priorityService.UpdatePriorityAsync(dto);
 
             if (!result)
             {
@@ -96,46 +95,6 @@ namespace ToDo.Client.Home.ViewModels
                 Priorities.Remove(model);
                 ShowSnackBar("Successful!", "Good job!");
             }
-        }
-
-        /// <summary>
-        /// Update priority to datebase.
-        /// </summary>
-        /// <param name="dto">The object that need to update </param>
-        /// <returns><see cref="bool"/>, indicates the result of update</returns>
-        private async Task<bool> UpdatePriorityAsync(PriorityDTO dto)
-        {
-            if (dto != null)
-            {
-                var result = await apiService.Update(dto);
-
-                if (result)
-                {
-                    PessimisticUpdate(Priorities, dto);
-                    return result;
-                }
-                return false;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Pessimistic update, insure the data absolutely keep the same.
-        /// </summary>
-        /// <param name="list">Priorities list</param>
-        /// <param name="dto">The priority that need to be updated</param>
-        private void PessimisticUpdate(ObservableCollection<PriorityModel> list, PriorityDTO dto)
-        {
-            var temp = list.FirstOrDefault(e => e.No == dto.No);
-            if (temp is null) return;
-
-            temp.Title = dto.Title;
-            temp.Description = dto.Description;
-            temp.State = (PriorityStatus)dto.State;
-            temp.DDL = dto.DDL;
-            if (temp.CompletedTime is not null)
-                temp.CompletedTime = dto.CompletedTime ?? null;
-            temp.Kind = dto.Kind;
         }
 
         #region Dialog Operations
@@ -163,28 +122,24 @@ namespace ToDo.Client.Home.ViewModels
             var dto = param.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
             if (dto != null)
             {
-                _ = UpdatePriorityAsync(dto);
+                _ = priorityService.UpdatePriorityAsync(dto);
             }
         }
 
         /// <summary>
-        /// Add Priority to database via WebAPI
+        /// Re-fresh UI priorities from database
         /// </summary>
-        /// <param name="dto">DTO Model</param>
-        /// <returns>The result of add</returns>
-        private async Task<bool> CreatePriorityAsync(PriorityDTO dto)
+        private async Task UpdateMainUIAsync()
         {
-            var result = await apiService.Create(dto);
+            var mainInfo = await priorityService.QueryAllPrioritiesAsync();
 
-            if (!result)
-            {
-                await notify.ShowAsync(TitleType.Error, "Create Failed!");
-                return result;
-            }
+            if (mainInfo is null) return;
 
-            Priorities.Add(dto.ToModel());
-            return result;
+            var enumer = mainInfo.Priorities.AsEnumerable();
+            UpdatePrioritiesList(enumer);
+            UpdateHomeInfo(mainInfo.CompletedCount, mainInfo.SummaryCount, mainInfo.MemosCount);
         }
+
 
         /// <summary>
         /// The callback of add priority
@@ -198,7 +153,7 @@ namespace ToDo.Client.Home.ViewModels
                 if (dto == null)
                     return;
 
-                await CreatePriorityAsync(dto);
+                await priorityService.CreatePriorityAsync(dto);
             }
             catch (Exception ex)
             {
@@ -207,42 +162,34 @@ namespace ToDo.Client.Home.ViewModels
         }
         #endregion
 
-
         /// <summary>
-        /// Query all priorities and home info.
+        /// 当数据刷新后，更新UI
         /// </summary>
-        /// <returns>All home info and priorities</returns>
-        private async Task<HomeInfoResponseDTO>? QueryAllPrioritiesAsync()
+        /// <param name="dto"></param>
+        private void UpdateHomeInfo(int completedCount, int summaryCount, int memosCount)
         {
-            try
-            {
-                var response = await apiService.Query<HomeInfoResponseDTO>();
-
-                if (response is null)
-                {
-                    await notify.ShowAsync(TitleType.Error, "Get all priorities failed!");
-                    return default;
-                }
-
-                return response;
-            }
-            catch (Exception e) { return default; }
+            InfoModel.CompletedCount = completedCount;
+            InfoModel.SummaryCount = summaryCount;
+            InfoModel.MemosCount = memosCount;
         }
 
-        #region Update Main Home
-
         /// <summary>
-        /// Re-fresh UI priorities from database
+        /// Pessimistic update, insure the data absolutely keep the same.
         /// </summary>
-        private async Task UpdateMainUIAsync()
+        /// <param name="list">Priorities list</param>
+        /// <param name="dto">The priority that need to be updated</param>
+        private void PessimisticUpdate(ObservableCollection<PriorityModel> list, PriorityDTO dto)
         {
-            var mainInfo = await QueryAllPrioritiesAsync();
+            var temp = list.FirstOrDefault(e => e.No == dto.No);
+            if (temp is null) return;
 
-            if (mainInfo is null) return;
-
-            var enumer = mainInfo.Priorities.AsEnumerable();
-            UpdatePrioritiesList(enumer);
-            UpdateHomeInfo(mainInfo.CompletedCount, mainInfo.SummaryCount, mainInfo.MemosCount);
+            temp.Title = dto.Title;
+            temp.Description = dto.Description;
+            temp.State = (PriorityStatus)dto.State;
+            temp.DDL = dto.DDL;
+            if (temp.CompletedTime is not null)
+                temp.CompletedTime = dto.CompletedTime ?? null;
+            temp.Kind = dto.Kind;
         }
 
         /// <summary>
@@ -267,33 +214,11 @@ namespace ToDo.Client.Home.ViewModels
             }
         }
 
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// 可以使用ObservableCollection吗
-        /// <summary>
-        /// 当数据刷新后，更新UI
-        /// </summary>
-        /// <param name="dto"></param>
-        private void UpdateHomeInfo(int completedCount, int summaryCount, int memosCount)
-        {
-            InfoModel.CompletedCount = completedCount;
-            InfoModel.SummaryCount = summaryCount;
-            InfoModel.MemosCount = memosCount;
-        }
-
-        #endregion
-
         /// <summary>
         /// Show Pop window when execute the command
         /// </summary>
         private void ShowSnackBar(string title, string message, 
-            ControlAppearance apprance = ControlAppearance.Danger,
+            ControlAppearance apprance = ControlAppearance.Primary,
             IconElement? icon = null, 
             int keepSeconds = 2)
         {

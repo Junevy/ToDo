@@ -44,7 +44,7 @@ namespace ToDo.Client
             containerRegistry.RegisterSingleton<ILocalizationService, LocalizationService>();
             containerRegistry.RegisterSingleton<ISnackbarService, SnackbarService>();
             containerRegistry.RegisterSingleton<IApi, HttpService>();
-            containerRegistry.RegisterSingleton<PriorityApiService>();
+            containerRegistry.RegisterSingleton<PriorityService>();
             containerRegistry.RegisterSingleton<AccountService>();
             containerRegistry.RegisterSingleton<RequestClient>(_ => new RequestClient("http://localhost:6338/api"));
 
@@ -73,6 +73,9 @@ namespace ToDo.Client
                 }
             });
 
+            //_ = CheckServerAsync();
+
+
             base.OnInitialized();
         }
 
@@ -80,6 +83,21 @@ namespace ToDo.Client
         {
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
             base.ConfigureViewModelLocator();
+        }
+
+        public async Task<bool> CheckServerAsync()
+        {
+            try
+            {
+                var tempApi = Container.Resolve<IApi>();
+
+                var response = await tempApi.GetRequestAsync<string>("/health");
+                return response.IsSuccess;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
