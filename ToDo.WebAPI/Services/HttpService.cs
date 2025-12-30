@@ -20,6 +20,17 @@ namespace ToDo.WebAPI.Services
             return await httpClient.ExecuteAsync<TRequest, TResponse>(request);
         }
 
+        public async Task<Response<TResponse>> GetRequestAsync<TResponse>(string route)
+        {
+            var request = new Request<object>()
+            {
+                Route = route,
+                Method = RestSharp.Method.GET,
+            };
+
+            return await httpClient.ExecuteAsync<object, TResponse>(request);
+        }
+
         public async Task<Response<TResponse>> PostRequestAsync<TRequest, TResponse>(string route, TRequest dto)
         {
             var request = new Request<TRequest>

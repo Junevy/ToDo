@@ -1,15 +1,12 @@
 ﻿using ToDo.Client.Services;
-using ToDo.WebAPI.HttpClient;
-using ToDo.WebAPI.Request;
-using ToDo.WebAPI.Request.DTOs;
+using ToDo.WebAPI.DTOs;
 
 namespace ToDo.Client.Login.ViewModels
 {
-    internal class LoginViewModel : BindableBase, IDialogAware
+    public class LoginViewModel : BindableBase, IDialogAware
     {
-        private readonly IContainerRegistry container;
-        private readonly HttpService httpService;
         private readonly NotificationService notify;
+        private readonly AccountService accountService;
 
         public string Title => "Login";
         public DialogCloseListener RequestClose { get; set; }
@@ -20,8 +17,8 @@ namespace ToDo.Client.Login.ViewModels
         #endregion
 
         #region Properties
-        private AccountRequestDTO accountDTO = new();
-        public AccountRequestDTO AccountDTO
+        private UserInfoRequestDTO accountDTO = new();
+        public UserInfoRequestDTO AccountDTO
         {
             get => accountDTO;
             set
@@ -32,11 +29,10 @@ namespace ToDo.Client.Login.ViewModels
         }
         #endregion
 
-        public LoginViewModel(IContainerRegistry container, HttpService httpService, NotificationService notify)
+        public LoginViewModel(NotificationService notify, AccountService accountService)
         {
-            this.container = container;
-            this.httpService = httpService;
             this.notify = notify;
+            this.accountService = accountService;
             LoginCommand = new AsyncDelegateCommand(Login);
             SignInCommand = new(SingIn);
         }
@@ -52,18 +48,17 @@ namespace ToDo.Client.Login.ViewModels
                 return;
             }
 
-            // 创建请求，设定 路由、请求方式、DTO
-            var response = await httpService.PostRequestAsync("/Users/Register", accountDTO);
+            var result = await accountService.Regeister(AccountDTO);
 
             // 注册失败
-            if (response.Code != 1)
+            if (!result)
             {
-                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Sign in error!");
+                await notify.ShowAsync(TitleType.Error, "Sign in error!");
                 return;
             }
 
             // 注册成功
-            await notify.ShowMessageAsync(TitleType.Notification, response.Message);
+            await notify.ShowAsync(TitleType.Notification, $"Sign in successful! You're Username is {AccountDTO.Account}");
         }
 
         private async Task Login()
@@ -78,16 +73,13 @@ namespace ToDo.Client.Login.ViewModels
                 return;
             }
 
-            // 创建请求，设定 路由、请求方式、DTO
-            var response = await httpService.GetRequestAsync<AccountRequestDTO>($"/Users/Login?account={accountDTO.Account}&password={accountDTO.Password}");
+            var result = await accountService.Login(accountDTO.Account, AccountDTO.Password);
 
-            // 登录失败
-            if (response.Code != 1)
+            if (!result)
             {
-                await notify.ShowMessageAsync(TitleType.Error, response.Message ?? "Login in error!");
+                await notify.ShowAsync(TitleType.Error, "Username or password not matched!");
                 return;
             }
-
             // 登录成功
             RequestClose.Invoke(new DialogResult(ButtonResult.OK));
         }

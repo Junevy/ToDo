@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ToDo.WebAPI.Services;
 
-namespace ToDo.WebAPI.Request.DTOs
+namespace ToDo.WebAPI.DTOs
 {
-    public class AccountRequestDTO : ValidatableBindableBase
+    public class UserInfoRequestDTO : ValidatableBindableBase
     {
         private string account;
         [Required(ErrorMessage = "Account can not be empty!")]
@@ -49,5 +49,10 @@ namespace ToDo.WebAPI.Request.DTOs
                 }
             }
         }
+
+        [Required]
+        public DateTime SignInDate { get; set; } = DateTime.Now;
+
+        public string Description { get; set; }
     }
 }

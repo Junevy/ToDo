@@ -24,11 +24,11 @@
         <!--<viewmodels:PriorityCommandArgs x:Key="PriorityCommandArgs"/>-->
     </UserControl.Resources>
 
-    <i:Interaction.Triggers>
+    <!--<i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding RefreshCommand}" />
         </i:EventTrigger>
-    </i:Interaction.Triggers>
+    </i:Interaction.Triggers>-->
 
     <Border
         Margin="2,10,0,0"
@@ -358,8 +358,8 @@
                                     Margin="0,0,0,5"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Command="{Binding ShowSnackbarCommand}"
-                                    Icon="{ui:SymbolIcon WindowEdit16}" />
+                                    Command="{Binding RefreshCommand}"
+                                    Icon="{ui:SymbolIcon ArrowClockWise12}" />
 
 
                             </StackPanel>

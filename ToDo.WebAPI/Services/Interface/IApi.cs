@@ -12,6 +12,7 @@ namespace ToDo.WebAPI.Services.Interface
         /// <param name="route">Route</param>
         /// <returns>The result of WebAPI</returns>
         Task<Response<TResponse>> GetRequestAsync<TRequest, TResponse>(string route);
+        Task<Response<TResponse>> GetRequestAsync<TResponse>(string route);
 
         /// <summary>
         /// Http Post Request

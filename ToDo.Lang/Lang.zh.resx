@@ -247,7 +247,7 @@
     <value>事项描述</value>
   </data>
   <data name="CompletedPrioritySentence" xml:space="preserve">
-    <value>以下待办事项均已完成。</value>
+    <value>以下待办事项均已完成</value>
   </data>
   <data name="dg_state" xml:space="preserve">
     <value>状态</value>

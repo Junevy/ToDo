@@ -45,6 +45,7 @@ namespace ToDo.Client
             containerRegistry.RegisterSingleton<ISnackbarService, SnackbarService>();
             containerRegistry.RegisterSingleton<IApi, HttpService>();
             containerRegistry.RegisterSingleton<PriorityApiService>();
+            containerRegistry.RegisterSingleton<AccountService>();
             containerRegistry.RegisterSingleton<RequestClient>(_ => new RequestClient("http://localhost:6338/api"));
 
             // ===================================
@@ -71,6 +72,7 @@ namespace ToDo.Client
                     return;
                 }
             });
+
             base.OnInitialized();
         }
 
