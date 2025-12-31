@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using DryIoc.ImTools;
+using System.Collections.ObjectModel;
 using ToDo.Client.Extensions;
 using ToDo.Client.Models;
 using ToDo.Client.Services;
 using ToDo.WebAPI.DTOs;
-using ToDo.WebAPI.Response.DTOs;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
@@ -66,27 +66,10 @@ namespace ToDo.Client.Home.ViewModels
                 array[1] is not PriorityModel model)
                 return;
 
-            var state = level switch
-            {
-                "Normal" => PriorityStatus.Normal,
-                "Priority" => PriorityStatus.Priority,
-                "Discard" => PriorityStatus.Discarded,
-                "RemindTomorrow" => PriorityStatus.RemindTomorrow,
-                "Completed" => PriorityStatus.Completed,
-                _ => PriorityStatus.RemindTomorrow,
-            };
-
             var snapStatus = model.State;
-            var dto = model.ToDTO();
-            dto.State = (int)state;
-            var result = await priorityService.UpdatePriorityAsync(dto);
+            var result = await priorityService.UpdatePriorityAsync(model.ToDTO(), level, (int)model.State);
 
-            if (!result)
-            {
-                model.State = snapStatus;
-                await notify.ShowAsync(TitleType.Error, "Update status failed!");
-                return;
-            }
+            PessimisticUpdate(Priorities, result);
 
             if (model.State is PriorityStatus.Completed)
             {
@@ -117,12 +100,19 @@ namespace ToDo.Client.Home.ViewModels
         /// Update priority to database When closed the UpdatePriorityDialog dialog
         /// </summary>
         /// <param name="param">Edited priority param</param>
-        private void UpdatePriorityCallBackAsync(IDialogResult param)
+        private async void UpdatePriorityCallBackAsync(IDialogResult param)
         {
             var dto = param.Parameters.GetValue<PriorityDTO>(nameof(PriorityDTO));
             if (dto != null)
             {
-                _ = priorityService.UpdatePriorityAsync(dto);
+                var result = await priorityService.UpdatePriorityAsync(dto);
+
+                if (!result)
+                {
+                    ShowSnackBar("Error!", "Update priority failed!", ControlAppearance.Danger);
+                    return;
+                }
+                PessimisticUpdate(Priorities, dto);
             }
         }
 
@@ -153,7 +143,13 @@ namespace ToDo.Client.Home.ViewModels
                 if (dto == null)
                     return;
 
-                await priorityService.CreatePriorityAsync(dto);
+                var result = await priorityService.CreatePriorityAsync(dto);
+                if (!result)
+                {
+                    ShowSnackBar("Error!", "Add priority failed!", ControlAppearance.Danger);
+                    return;
+                }
+                Priorities.Add(dto.ToModel());
             }
             catch (Exception ex)
             {
@@ -217,9 +213,11 @@ namespace ToDo.Client.Home.ViewModels
         /// <summary>
         /// Show Pop window when execute the command
         /// </summary>
-        private void ShowSnackBar(string title, string message, 
+        private void ShowSnackBar(
+            string title,
+            string message,
             ControlAppearance apprance = ControlAppearance.Primary,
-            IconElement? icon = null, 
+            IconElement? icon = null,
             int keepSeconds = 2)
         {
             snackbarService.Show(

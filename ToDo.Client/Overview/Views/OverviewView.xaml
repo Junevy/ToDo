@@ -98,7 +98,7 @@
                     <StackPanel DockPanel.Dock="Top">
                         <!--  search card and datagrid  -->
                         <ui:CardExpander
-                            MaxHeight="300"
+                            MaxHeight="350"
                             Padding="10"
                             Icon="{ui:SymbolIcon Search12}"
                             IsExpanded="True">
@@ -221,8 +221,9 @@
 
                         <ui:CardExpander
                             Grid.Row="1"
-                            MaxHeight="300"
+                            MaxHeight="350"
                             Padding="10"
+                            
                             Icon="{ui:SymbolIcon TableSimpleCheckmark32}">
 
                             <i:Interaction.Triggers>
@@ -254,7 +255,7 @@
 
 
                             <ui:DataGrid
-                                MaxHeight="300"
+                                MaxHeight="350"
                                 AutoGenerateColumns="False"
                                 FrozenColumnCount="1"
                                 HorizontalScrollBarVisibility="Auto"

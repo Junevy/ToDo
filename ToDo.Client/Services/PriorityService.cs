@@ -1,4 +1,5 @@
-﻿using ToDo.WebAPI.DTOs;
+﻿using ToDo.Client.Models;
+using ToDo.WebAPI.DTOs;
 using ToDo.WebAPI.Request.DTOs;
 using ToDo.WebAPI.Response.DTOs;
 using ToDo.WebAPI.Services.Interface;
@@ -59,6 +60,33 @@ namespace ToDo.Client.Services
                 return await UpdateAsync(dto);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Update priority to datebase.
+        /// </summary>
+        /// <param name="dto">The object that need to update </param>
+        /// <returns><see cref="bool"/>, indicates the result of update</returns>
+        public async Task<PriorityDTO> UpdatePriorityAsync(PriorityDTO dto, string newStatus, int snapStatus)
+        {
+            var status = newStatus switch
+            {
+                "Normal" => PriorityStatus.Normal,
+                "Priority" => PriorityStatus.Priority,
+                "Discard" => PriorityStatus.Discarded,
+                "RemindTomorrow" => PriorityStatus.RemindTomorrow,
+                "Completed" => PriorityStatus.Completed,
+                _ => PriorityStatus.RemindTomorrow,
+            };
+
+            dto.State = (int)status;
+            var result = await UpdatePriorityAsync(dto);
+
+            if (!result)
+            {
+                dto.State = snapStatus; //失败回滚
+            }
+            return dto;
         }
 
         /// <summary>
