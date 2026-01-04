@@ -79,7 +79,9 @@ namespace ToDo.Client.Services
                 _ => PriorityStatus.RemindTomorrow,
             };
 
-            dto.State = (int)status;
+            dto.State = status == PriorityStatus.Completed ? 0 : (int)status;
+            dto.DDL = status == PriorityStatus.RemindTomorrow ? DateTime.Now.AddDays(1) : dto.DDL;
+
             var result = await UpdatePriorityAsync(dto);
 
             if (!result)

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using ToDo.Client.Extensions;
 using ToDo.Client.Models;
+using ToDo.Client.Models.EventAggregator;
 using ToDo.Client.Services;
 using ToDo.WebAPI.DTOs;
 using Wpf.Ui;
@@ -14,9 +15,11 @@ namespace ToDo.Client.Home.ViewModels
         private readonly IDialogService dialogService;
         private readonly NotificationService notify;
         private readonly PriorityService priorityService;
+        private readonly Guid vmId = Guid.NewGuid();
 
         // Pop window object
         private readonly ISnackbarService snackbarService;
+        private readonly IEventAggregator aggregator;
 
         // The priority list
         public ObservableCollection<PriorityModel> Priorities { get; private set; } = [];
@@ -31,11 +34,13 @@ namespace ToDo.Client.Home.ViewModels
         public DelegateCommand<Guid?> EditPriorityCommand { get; set; }
 
         public HomeViewModel(ISnackbarService snackbarService,
+            IEventAggregator aggregator,
             IDialogService dialogService,
             PriorityService priorityService,
             NotificationService notify)
         {
             this.snackbarService = snackbarService;
+            this.aggregator = aggregator;
             this.dialogService = dialogService;
             this.priorityService = priorityService;
             this.notify = notify;
@@ -53,6 +58,13 @@ namespace ToDo.Client.Home.ViewModels
             {
                 dialogService.ShowDialog("AddPriorityView", CreatePriorityResultCallbackAsync);
             });
+
+            aggregator.GetEvent<PriorityUpdatedEvent>().Subscribe((args) =>
+            {
+                if (args.Id == vmId) return;
+
+            });
+
         }
 
         /// <summary>
@@ -66,7 +78,6 @@ namespace ToDo.Client.Home.ViewModels
                 array[1] is not PriorityModel model)
                 return;
 
-            var snapStatus = model.State;
             var result = await priorityService.UpdatePriorityAsync(model.ToDTO(), level, (int)model.State);
 
             PessimisticUpdate(Priorities, result);
@@ -78,9 +89,10 @@ namespace ToDo.Client.Home.ViewModels
                 Priorities.Remove(model);
                 ShowSnackBar("Successful!", "Good job!");
             }
+
+            PublishEvent(vmId, result, "StatusChanged", DateTime.Now);
         }
 
-        #region Dialog Operations
         /// <summary>
         /// Edit the priority command of the Double click priority. 
         /// </summary>
@@ -113,6 +125,7 @@ namespace ToDo.Client.Home.ViewModels
                     return;
                 }
                 PessimisticUpdate(Priorities, dto);
+                PublishEvent(vmId, dto, "StatusChanged", DateTime.Now);
             }
         }
 
@@ -156,7 +169,6 @@ namespace ToDo.Client.Home.ViewModels
                 await notify.ShowAsync(TitleType.Error, ex.Message ?? "Add priority error!");
             }
         }
-        #endregion
 
         /// <summary>
         /// 当数据刷新后，更新UI
@@ -186,6 +198,12 @@ namespace ToDo.Client.Home.ViewModels
             if (temp.CompletedTime is not null)
                 temp.CompletedTime = dto.CompletedTime ?? null;
             temp.Kind = dto.Kind;
+        }
+
+        private void PublishEvent(Guid id, PriorityDTO dTO, string message, DateTime publishTime)
+        {
+            aggregator.GetEvent<PriorityUpdatedEvent>()
+                .Publish(new PriorityUpdatedEventArgs(id, dTO, message, publishTime));
         }
 
         /// <summary>

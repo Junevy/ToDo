@@ -18,7 +18,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <cvt:StatusToNumConvter x:Key="StatusToNumConvter"/>
+        <cvt:StatusToNumConvter x:Key="StatusToNumConvter" />
     </UserControl.Resources>
 
     <Border
@@ -78,9 +78,10 @@
                             SelectedDate="{Binding QueryDTO.EndDate, StringFormat={}{0:d}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Text="{lang:Resx EndDate}" />
 
-                        <ComboBox IsEditable="True"
+                        <ComboBox
                             MinWidth="120"
                             Margin="15,0,0,0"
+                            IsEditable="True"
                             ItemsSource="{Binding PriorityStatusList}"
                             SelectedItem="{Binding QueryDTO.Status, Mode=TwoWay, Converter={StaticResource StatusToNumConvter}}" />
 
@@ -125,7 +126,7 @@
                             </ui:CardExpander.Header>
 
                             <ui:DataGrid
-                                x:Name="SearchData"
+                                x:Name="QueriedData"
                                 MaxHeight="300"
                                 AutoGenerateColumns="False"
                                 FrozenColumnCount="1"
@@ -133,7 +134,11 @@
 
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="RowEditEnding">
-                                        <i:InvokeCommandAction Command="{Binding UpdatePriorityCommand}" CommandParameter="{Binding ElementName=SearchData, Path=SelectedItem}" />
+                                        <i:InvokeCommandAction Command="{Binding UpdatePriorityCommand}" CommandParameter="{Binding ElementName=QueriedData, Path=SelectedItem}" />
+                                    </i:EventTrigger>
+
+                                    <i:EventTrigger EventName="SelectedCellsChanged">
+                                        <i:InvokeCommandAction Command="{Binding UpdateSelectedItemCommand}" CommandParameter="{Binding ElementName=QueriedData, Path=SelectedItem}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
 
@@ -223,7 +228,6 @@
                             Grid.Row="1"
                             MaxHeight="350"
                             Padding="10"
-                            
                             Icon="{ui:SymbolIcon TableSimpleCheckmark32}">
 
                             <i:Interaction.Triggers>
